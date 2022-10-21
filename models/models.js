@@ -16,17 +16,28 @@ const Token = sequelize.define('token', {
 })
 
 const Project = sequelize.define('project', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true} // id
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
+    name: {type: DataTypes.STRING, allowNull: false}
 })
 
 const SocNet = sequelize.define('socnet', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    socnet: {type: DataTypes.STRING, allowNull: false}
+    socnet: {type: DataTypes.STRING, allowNull: false},
+    link: {type: DataTypes.STRING},
+    token: {type: DataTypes.STRING}
+})
+
+const SocNetList = sequelize.define('socnetlist', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
 const Theme = sequelize.define('theme', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
     theme: {type: DataTypes.STRING, allowNull: false}
+})
+
+const ThemeList = sequelize.define('themelist', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
 const Rules = sequelize.define('rules', {
@@ -64,6 +75,12 @@ Project.hasMany(Theme);
 Post.hasMany(Img);
 Post.hasMany(Comment);
 
+Post.belongsToMany(SocNet, {through: SocNetList});
+SocNet.belongsToMany(Post, {through: SocNetList});
+
+Post.belongsToMany(Theme, {through: ThemeList});
+Theme.belongsToMany(Post, {through: ThemeList});
+
 module.exports = {
     User,
     Project,
@@ -73,5 +90,7 @@ module.exports = {
     Comment,
     Theme,
     Img,
-    Token
+    Token,
+    SocNetList,
+    ThemeList
 }

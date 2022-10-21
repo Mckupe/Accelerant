@@ -23,9 +23,9 @@ class userController {
             await tokenController.saveToken(user.id, tokens.refreshToken);
             res.cookie('refreshToken', tokens.refreshToken, {
                 maxAge: 15 * 24 * 60 * 60 * 1000,
-                httpOnly: true,
+                httpOnly: true
             });
-            res.json(tokens.accessToken);
+            res.json({user: user, token: tokens.accessToken});
         } else {
             res.json('Пользователь существует!');
         }
@@ -50,7 +50,7 @@ class userController {
                     maxAge: 15 * 24 * 60 * 60 * 1000,
                     httpOnly: true
                 });
-                res.json(tokens.accessToken);
+                res.json({user: candidate, token: tokens.accessToken});
             }
         } else {
             res.json('Пользователь не найден!');
