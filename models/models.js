@@ -11,75 +11,83 @@ const User = sequelize.define('user', {
 })
 
 const Token = sequelize.define('token', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     refreshToken: {type: DataTypes.STRING} // refresh токен
 })
 
+const ProjectUsers = sequelize.define('projectusers', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true} 
+})
+
 const Project = sequelize.define('project', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    name: {type: DataTypes.STRING, allowNull: false}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false} // имя проекта
 })
 
 const SocNet = sequelize.define('socnet', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    socnet: {type: DataTypes.STRING, allowNull: false},
-    link: {type: DataTypes.STRING},
-    token: {type: DataTypes.STRING}
-})
-
-const SocNetList = sequelize.define('socnetlist', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    socnet: {type: DataTypes.STRING, allowNull: false}, // название соцсети
+    link: {type: DataTypes.STRING}, // сылка на чат (телеграм)
+    token: {type: DataTypes.STRING} // токен бота (телеграм)
 })
 
 const Theme = sequelize.define('theme', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    theme: {type: DataTypes.STRING, allowNull: false}
-})
-
-const ThemeList = sequelize.define('themelist', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    theme: {type: DataTypes.STRING, allowNull: false}, // название темы
+    color: {type: DataTypes.STRING, allowNull: false} // цвет
 })
 
 const Rules = sequelize.define('rules', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    rule1: {type: DataTypes.BOOLEAN}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    readAndCreateDraft: {type: DataTypes.BOOLEAN}, // 6 прав, по уровню возможностей, которые они предоставляют
+    readTalkAndPlan: {type: DataTypes.BOOLEAN},
+    anal: {type: DataTypes.BOOLEAN},
+    createAndUpdatePlan: {type: DataTypes.BOOLEAN},
+    talkToPlan: {type: DataTypes.BOOLEAN},
+    superuser: {type: DataTypes.BOOLEAN}
 })
 
 const Post = sequelize.define('post', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    text: {type: DataTypes.STRING, allowNull: false},
-    time: {type: DataTypes.STRING},
-    darft: {type: DataTypes.BOOLEAN},
-    talk: {type: DataTypes.BOOLEAN},
-    plan: {type: DataTypes.BOOLEAN}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    text: {type: DataTypes.STRING, allowNull: false}, // текст поста
+    time: {type: DataTypes.STRING}, // время публикации
+    draft: {type: DataTypes.BOOLEAN}, // черновик?
+    talk: {type: DataTypes.BOOLEAN}, // обсуждение?
+    plan: {type: DataTypes.BOOLEAN}, // запланирован?
+    socnetId: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false}, // массив id соцсетей
+    themeId: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false} // массив id тем
 })
 
 const Img = sequelize.define('img', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    img: {type: DataTypes.STRING, allowNull: false}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    img: {type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false} // название файла img
 })
 
 const Comment = sequelize.define('comment', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}, // id
-    comment: {type: DataTypes.STRING, allowNull: false}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    comment: {type: DataTypes.STRING, allowNull: false} // текст комментария
 })
 
-User.hasMany(Project);
-User.hasOne(Rules);
+User.belongsToMany(Project, {through: ProjectUsers});
+User.belongsToMany(Rules, {through: ProjectUsers});
+Project.belongsToMany(User, {through: ProjectUsers});
+
+// связь юзера с проектами и правами многие ко многим, поэтому есть промежуточная табличка
+
+User.hasMany(Comment); 
 User.hasOne(Token);
 
 Project.hasMany(Post);
+Post.belongsTo(Project);
+
 Project.hasMany(SocNet);
+SocNet.belongsTo(Project);
+
 Project.hasMany(Theme);
+Theme.belongsTo(Project)
 
 Post.hasMany(Img);
 Post.hasMany(Comment);
-
-Post.belongsToMany(SocNet, {through: SocNetList});
-SocNet.belongsToMany(Post, {through: SocNetList});
-
-Post.belongsToMany(Theme, {through: ThemeList});
-Theme.belongsToMany(Post, {through: ThemeList});
 
 module.exports = {
     User,
@@ -91,6 +99,5 @@ module.exports = {
     Theme,
     Img,
     Token,
-    SocNetList,
-    ThemeList
+    ProjectUsers
 }

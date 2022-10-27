@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const app = express();
 const cors = require('cors');
 const sequelize = require('./db');
 const router = require('./routes/index');
 const cookieParser = require('cookie-parser');
-const authMiddleware = require('./middlewares/auth-middleware');
+const errorMiddleware = require('./middlewares/error-middleware');
 
 const PORT = process.env.PORT || 5000;
 
@@ -15,6 +16,8 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(express.static(path.resolve(__dirname, 'static'))); // для отдачи файлов как статики, вдруг пригодится
 app.use('/api', router);
 
 // запускаем sequelize и само приложение
@@ -30,6 +33,6 @@ const start = async () => {
 }
 
 
-app.use(authMiddleware); // middleware для проверки авторизован ли пользователь
+app.use(errorMiddleware);
 
 start();

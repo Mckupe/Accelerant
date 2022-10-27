@@ -1,6 +1,7 @@
 const {User} = require('../models/models');
 const tokenController = require('./tokenController');
 const bcrypt = require('bcrypt');
+const apiError = require('../error/apiError');
 
 class userController {
 
@@ -13,8 +14,11 @@ class userController {
      * также создаем пару токенов и возвращаем AccessToken на клиент 
      */
 
-    async register(req, res) {
+    async register(req, res, next) {
         const {username, email, password} = req.body;
+        if (!username || !email || !password) {
+            return next(apiError.badRequest('Некорректный username, email или password!'));
+        }
         const candidate = await User.findOne({where: {email: email}});
         if (!candidate) {
             const hashpass = await bcrypt.hash(password, 5);
@@ -25,9 +29,9 @@ class userController {
                 maxAge: 15 * 24 * 60 * 60 * 1000,
                 httpOnly: true
             });
-            res.json({user: user, token: tokens.accessToken});
+            return res.json({token: tokens.accessToken});
         } else {
-            res.json('Пользователь существует!');
+            return next(apiError.badRequest('Пользователь с таким email уже существует!'));
         }
     }
 
@@ -37,12 +41,15 @@ class userController {
      * @param {string} email - Email пользователя
      */
 
-    async login(req, res) {
+    async login(req, res, next) {
         const {password, email} = req.body;
+        if (!email || !password) {
+            return next(apiError.badRequest('Некорректный email или password!'));
+        }
         const candidate = await User.findOne({where: {email: email}});
         if (candidate) {
             let comppass = bcrypt.compareSync(password, candidate.password);
-            if (!comppass) { res.json('Неверный пароль!') }
+            if (!comppass) { return next(apiError.internal('Указан неверный пароль!')); }
             else {
                 const tokens = tokenController.genereteToken(candidate.id, email);
                 await tokenController.saveToken(candidate.id, tokens.refreshToken);
@@ -50,10 +57,10 @@ class userController {
                     maxAge: 15 * 24 * 60 * 60 * 1000,
                     httpOnly: true
                 });
-                res.json({user: candidate, token: tokens.accessToken});
+                return res.json({token: tokens.accessToken});
             }
         } else {
-            res.json('Пользователь не найден!');
+            return next(apiError.internal('Пользователь не найден!'));
         }
     }
 
@@ -74,12 +81,12 @@ class userController {
      * По refresh токену из кук, находим пользователя и генерируем новую пару токенов
      */
 
-    async refresh(req, res) {
+    async refresh(req, res, next) {
         const {refreshToken} = req.cookies;
-        if (!refreshToken) throw new Error('Пользователь не авторизован!');
+        if (!refreshToken) return next(apiError.unauthorized('Пользователь не авторизован!'));
         const userData = tokenController.validateRefresh(refreshToken); // валидируем токен
         const findToken = await tokenController.findToken(refreshToken);
-        if (!userData || !findToken) throw new Error('Пользователь не авторизован!');
+        if (!userData || !findToken) return next(apiError.internal('Отсутсвует токен или userdata!'));
         const user = await User.findOne({where: {id: userData.id}});
         const tokens = tokenController.genereteToken(user.id, user.email);
         await tokenController.saveToken(user.id, tokens.refreshToken);
@@ -87,7 +94,7 @@ class userController {
             maxAge: 15 * 24 * 60 * 60 * 1000,
             httpOnly: true
         });
-        res.json(tokens.accessToken);
+        return res.json(tokens.accessToken);
     }
 }
 

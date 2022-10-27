@@ -1,36 +1,130 @@
-const {User, Project} = require('../models/models');
+const {User, Project, Rules, ProjectUsers} = require('../models/models');
+const ruleController = require('./ruleController');
+const apiError = require('../error/apiError');
 
 class projectController {
-    async addProject(req, res) {
+
+    /**
+     * Функция добавления проекта
+     * @param {number} userid - id пользователя
+     * @param {string} name - название проекта
+     */// доступна всем
+
+    async addProject(req, res, next) {
         const {userid, name} = req.body;
+        if (!name) {
+            return next(apiError.badRequest('Введите название проекта!'));
+        }
         const user = await User.findOne({where: {id: userid}});
         if (user) { 
-            if (await Project.findOne({where: {name: name}})) { res.json({error: 'Проект с таким названием уже существует!'}); }
+            if (await Project.findOne({where: {name: name}}) 
+            && await ProjectUsers.findOne({where: {userId: userid}})) { 
+                return next(apiError.badRequest('Проект с таким названием уже существует!'));
+            }
             else { 
-                const project = await Project.create({userId: userid, name: name}); 
-                res.json({ project: project });
+                const project = await Project.create({name: name});
+                const rule = await Rules.create({
+                    readAndCreateDraft: true,
+                    readTalkAndPlan: true,
+                    anal: true,
+                    createAndUpdatePlan: true,
+                    talkToPlan: true,
+                    superuser: true
+                });
+                await ProjectUsers.create({userId: userid, projectId: project.id, ruleId: rule.id});
+                return res.json({ projectid: project.id });
             }
         } else {
-            res.json('Пользователь не найден!');
+            return next(apiError.internal('Пользователь не найден!'));
         }
     }
 
+    /**
+     * Функция получения всех проектов
+     * @param {number} userid - id пользователя
+     */// доступна всем
+
     async getProjects(req, res) {
         const {userid} = req.body;
-        const projects = await Project.findAll({where: {userId: userid}});
-        res.json({projects: projects});
+        const pusers = await ProjectUsers.findAll({where: {userId: userid}});
+        const projects = [];
+        for(let i = 0; i < pusers.length; i++) {
+            const project = await Project.findOne({where: {id: pusers[i].projectId}});
+            projects.push(project);
+        }
+        return res.json({projects: projects});
     }
 
-    async updateProject(req, res) {
-        const {projectid, text} = req.body;
-        const project = await Project.update({name: text}, {where: {id: projectid}});
-        res.json({project: project});
+    /**
+     * Функция изменения названия проекта
+     * @param {number} userid - id пользователя
+     * @param {number} projectid - id проекта
+     * @param {string} name - название проекта
+     */// доступна только с правами создателя/администратора
+
+    async updateName(req, res, next) {
+        const {userid, projectid, name} = req.body;
+        if (!projectid || !name) { 
+            return next(apiError.badRequest('Отсутсвует projecid или name!')); 
+        }
+        const rule = await ruleController.getRules(userid, projectid);
+        if (rule.superuser) {
+            const project = await Project.update({name: name}, {where: {id: projectid}});
+            return res.json({project: project});
+        }
+        else return next(apiError.forbidden('Недостаточно прав!'));
     }
 
-    async deleteProject(req, res) {
-        const {projectid} = req.body;
-        await Project.destroy({where: {id: projectid}});
-        res.json({project: 'Проект удален!'});
+    /**
+     * Функция удаления проекта
+     * @param {number} userid - id пользователя
+     * @param {number} projectid - id проекта
+     */// доступна только с правами создателя/администратора
+
+    async deleteProject(req, res, next) {
+        const {userid, projectid} = req.body;
+        if (!projectid) {
+            return next(apiError.badRequest('Отсутсвует projecid!'));
+        }
+        const rule = await ruleController.getRules(userid, projectid);
+        if (rule.superuser) { 
+            await Project.destroy({where: {id: projectid}});
+            return res.json({project: 'Проект удален!'});
+        }
+        else return next(apiError.forbidden('Недостаточно прав!'));
+    }
+
+    /**
+     * Функция добавления нового пользователя в проект
+     * @param {number} userid - id пользователя
+     * @param {number} projectid - id проекта
+     * @param {boolean} readAndCreateDraft - доступ к чтению и созданию черновиков
+     * @param {boolean} readTalkAndPlan - доступ к чтению обсуждений и запланированных публикаций
+     * @param {boolean} anal - доступ к аналитике проекта
+     * @param {boolean} createAndUpdatePlan - доступ к созданию и обновлению запланированных публикаций
+     * @param {boolean} talkToPlan - доступ к утверждению публикаций
+     * @param {boolean} superuser - администратор
+     */// доступна только с правами создателя/администратора
+
+    async addUser(req, res, next) {
+        const {userid, projectid, readAndCreateDraft, readTalkAndPlan, anal, createAndUpdatePlan, talkToPlan, superuser} = req.body;
+        if (!projectid || !readAndCreateDraft || !readTalkAndPlan || !anal || !createAndUpdatePlan || !talkToPlan || !superuser) {
+            return next(apiError.badRequest('Отсутсвует какой-либо из параметров доступа!'));
+        }
+        const rule = await ruleController.getRules(userid, projectid);
+        if (rule.superuser) {
+            const rule = await Rules.create({
+                readAndCreateDraft: readAndCreateDraft,
+                readTalkAndPlan: readTalkAndPlan,
+                anal: anal,
+                createAndUpdatePlan: createAndUpdatePlan,
+                talkToPlan: talkToPlan,
+                superuser: superuser
+            });
+            await ProjectUsers.create({userId: userid, projectId: projectid, ruleId: rule.id});
+            return res.json('Пользователь добавлен!');
+        }
+        else return next(apiError.forbidden('Недостаточно прав!'));
     }
 }
 
