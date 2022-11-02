@@ -1,0 +1,33 @@
+.container__add {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+    border: 2px solid #7C807D;
+    border-radius: 8px;
+    margin: 40px 0px 0px 57px;
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+        background: #EAEAEA;
+        transition: .2s;
+    }
+}
+
+.plus {
+    width: 24px;
+    height: 24px;
+    background: url('../../static/plus.svg') no-repeat center;
+    margin-bottom: 23px;
+}
+
+.adder__text {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    color: #7C807D;
+}

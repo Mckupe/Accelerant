@@ -1,0 +1,17 @@
+.main__container {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    font-family: 'Inter';
+}
+  
+.container {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+}
+  
+  .main {
+    background-color: #F2F2F2;
+}
