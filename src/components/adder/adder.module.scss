@@ -1,4 +1,4 @@
-.container__add {
+.container {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -7,8 +7,9 @@
     width: 180px;
     height: 180px;
     border: 2px solid #7C807D;
+    margin-right: 24px;
+    margin-bottom: 24px;
     border-radius: 8px;
-    margin: 40px 0px 0px 57px;
     cursor: pointer;
     transition: .2s;
 
@@ -25,7 +26,7 @@
     margin-bottom: 23px;
 }
 
-.adder__text {
+.container__text {
     font-weight: 500;
     font-size: 16px;
     line-height: 140%;

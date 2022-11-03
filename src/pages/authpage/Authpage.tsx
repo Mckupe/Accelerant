@@ -53,7 +53,8 @@ function Authpage() {
         }).then((response) => {
           console.log(response.data)
           tokenStore.addtoken(response.data.token);
-          navigate('/home');
+          userStore.changeName(response.data.username);
+          navigate('/project');
         }).catch((error) => {
           console.log(error.response.data.message);
       });

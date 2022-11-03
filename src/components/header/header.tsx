@@ -1,10 +1,14 @@
 import styles from './header.module.scss';
 
-const Header = () => {
+type HeaderProps = {
+    text: string;
+}
+
+const Header = ({text}: HeaderProps) => {
     return (
         <div className={styles.container}>
             <div className={styles.text}>
-                Проекты
+                {text}
             </div>
         </div>
     )

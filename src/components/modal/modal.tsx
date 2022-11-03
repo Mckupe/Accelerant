@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { tokenStore } from '../../../stores/tokenStore';
+import { tokenStore } from '../../stores/tokenStore';
 import styles from './modal.module.scss';
-import { modalStore } from '../../../stores/modalStore';
+import { modalStore } from '../../stores/modalStore';
 import { observer } from 'mobx-react-lite';
 
 const Modal = () => {
@@ -32,6 +32,7 @@ const Modal = () => {
                     return console.log(error.response.data.message);
             });
             modalStore.changeModal(false);
+            modalStore.changeAddModal(true);
         }
     }
 

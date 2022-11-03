@@ -1,19 +1,19 @@
 import styles from './adder.module.scss';
-import Modal from './modal/modal';
 import { modalStore } from '../../stores/modalStore';
 
-const Adder = () => {
+type AdderProps = {
+    text: string;
+}
+
+const Adder = ({text}: AdderProps) => {
 
     return (
-        <>
-            <div onClick={() => modalStore.changeModal(true)} className={styles.container__add}>
-                <div className={styles.plus}/>
-                <div className={styles.adder__text}>
-                    Новый проект
-                </div>
+        <div onClick={() => modalStore.changeModal(true)} className={styles.container}>
+            <div className={styles.plus}/>
+            <div className={styles.container__text}>
+                {text}
             </div>
-            <Modal/>
-        </>
+        </div>
     )
 }
 

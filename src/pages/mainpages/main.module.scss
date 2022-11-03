@@ -12,6 +12,12 @@
     grid-template-rows: min-content 1fr;
 }
   
-  .main {
+.main {
     background-color: #F2F2F2;
+}
+
+.adder__and__projects {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 40px 57px 0px 57px;
 }
