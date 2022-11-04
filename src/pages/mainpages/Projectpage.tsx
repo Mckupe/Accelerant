@@ -18,32 +18,57 @@ type ObjectProject = {
     name: string;
     nameCreator: string;
     arraySoc: Array<string>;
+    favorit: boolean;
 }
 
 function Projectpage() {
 
     const navigate = useNavigate();
+    const projects = projectStore.sort;
+    console.log(JSON.parse(JSON.stringify(projects)));
 
     useEffect(() => {
         async function projects() {
-            console.log(tokenStore.token)
             await axios({
                 method: 'get',
                 url: 'http://localhost:5000/api/project/get',
                 headers: {'Authorization': 'Bearer ' + tokenStore.token}
                 }).then((response) => {
-                    projectStore.changeProjects(response.data.projects);
+                    projectStore.resetArray();
+                    const res = response.data.projects;
+                    res.map((project: ObjectProject) => {
+                        projectStore.changeProjectData(project);
+                        projectStore.addProject();
+                    });
                 }).catch((error) => {
                     console.log(error.response.data.message);
             });
         }
         projects();
+        modalStore.changeAddModal(false);
     }, [modalStore.addModal]);
 
     function onClickProject(e: any) {
-
-        projectStore.changeProjectData(e.currentTarget.dataset.id, e.currentTarget.dataset.name);
+        projectStore.changeActiveProject(e.currentTarget.dataset.id, e.currentTarget.dataset.name);
         navigate('/posts');
+    }
+
+    async function onClickStar(e: any) {
+        e.stopPropagation();
+        const favorit = projectStore.favorit(e.currentTarget.dataset.id);
+        await axios({
+            method: 'put',
+            url: 'http://localhost:5000/api/project/update',
+            headers: {'Authorization': 'Bearer ' + tokenStore.token},
+            data: {
+                projectid: e.currentTarget.dataset.id, 
+                name:  e.currentTarget.dataset.name,
+                favorit: favorit
+            }
+            }).then((response) => {
+            }).catch((error) => {
+                console.log(error.response.data.message);
+        });
     }
 
     return (
@@ -55,8 +80,17 @@ function Projectpage() {
                     <Filter/>
                     <div className={styles.adder__and__projects}>
                         <Adder text={'Новый проект'}/>
-                        {JSON.parse(JSON.stringify(projectStore.projects)).map((project: ObjectProject, i: number) => {
-                            return <Project onClick={onClickProject} id={project.id} name={project.name} nameCreator={project.nameCreator} arrSoc={project.arraySoc} key={i}/>
+                        {JSON.parse(JSON.stringify(projects)).map((project: ObjectProject, i: number) => {
+                            return <Project 
+                                        onClick={onClickProject} 
+                                        onClickStar={onClickStar} 
+                                        id={project.id} 
+                                        name={project.name} 
+                                        nameCreator={project.nameCreator} 
+                                        arrSoc={project.arraySoc} 
+                                        favorit={project.favorit} 
+                                        key={i}
+                                    />
                         })}
                         <Modal/>
                     </div>

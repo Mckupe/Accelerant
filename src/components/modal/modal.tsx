@@ -11,7 +11,6 @@ const Modal = () => {
     const [value, setValue] = useState('');
 
     async function buttonClick(e: any) {
-        console.log(value);
         e.preventDefault();
         const re = /^.{1,}$/;
         if (!re.test(value)) {

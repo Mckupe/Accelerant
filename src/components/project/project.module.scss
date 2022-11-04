@@ -34,6 +34,18 @@
     height: 20px;
     background: url('../../static/star.svg') no-repeat center;
     margin-left: 10px;
+    
+
+    &:hover {
+        background: url('../../static/starHover.svg') no-repeat center;
+    }
+}
+
+.head__star__active {
+    width: 20px;
+    height: 20px;
+    background: url('../../static/starActive.svg') no-repeat center;
+    margin-left: 10px;
 }
 
 .main {
@@ -55,11 +67,12 @@
     color: #2A2C2A;
 }
 
-.main__telega {
+.telega {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: url('../../static/tg.svg');
+    background: url('../../static/tgg.webp') no-repeat;
+    background-size: 20px;
     margin-right: 8px;
 }
 

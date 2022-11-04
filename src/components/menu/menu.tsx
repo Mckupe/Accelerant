@@ -20,8 +20,8 @@ const Menu = () => {
                         <div className={styles.menu_text}>Шаблоны</div>
                     </NavLink>
                 </div>
-                <div className={styles.container__nameproject} style={{display: projectStore.projectData.name ? 'flex' : 'none'}}>{projectStore.projectData.name}</div>
-                <div className={styles.container__menu} style={{display: projectStore.projectData.name  ? 'flex' : 'none'}}>
+                <div className={styles.container__nameproject} style={{display: projectStore.activeProject.name ? 'flex' : 'none'}}>{projectStore.activeProject.name}</div>
+                <div className={styles.container__menu} style={{display: projectStore.activeProject.name  ? 'flex' : 'none'}}>
                     <div className={styles.logoandtext__block}>
                         <span className={styles.newpost}></span>
                         <div className={styles.menu_text}>Новый пост</div>

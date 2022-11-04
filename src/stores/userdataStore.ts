@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { makePersistable } from "mobx-persist-store";
 
 class userdataStore {
 
@@ -21,7 +22,8 @@ class userdataStore {
     }
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+        makePersistable(this, { name: 'userdataStore', properties: ['userdata'], storage: sessionStorage });
     }
 
     changeName(name: string) {

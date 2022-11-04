@@ -1,19 +1,9 @@
-import { autorun, makeAutoObservable, toJS} from "mobx";
-
-function autoSave(store: any, save: any) {
-    let firstRun = true;
-    autorun(() => {
-      const json = JSON.stringify(toJS(store.token));
-      if (!firstRun) {
-        save(json);
-      }
-      firstRun = false;
-    });
-  }
+import { makeAutoObservable } from "mobx";
+import { makePersistable } from 'mobx-persist-store';
 
 class tokenDataStore {
 
-    token = this.resetToken();
+    token: string = this.resetToken();
 
     resetToken() {
         return ('');
@@ -21,24 +11,11 @@ class tokenDataStore {
 
     constructor() {
         makeAutoObservable(this);
-        this.load();
-        autoSave(this, this.save.bind(this));
+        makePersistable(this, { name: 'tokenDataStore', properties: ['token'], storage: sessionStorage });
     }
 
     addtoken(token: string) {
         this.token = token;
-    }
-
-    load() {
-        const data = localStorage.getItem('store');
-        if (data) {
-            this.token = data.replace(/['"]+/g, '');
-        }
-        
-    }
-
-    save(json: any) {
-        localStorage.setItem('store', json);
     }
 }
 
