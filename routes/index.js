@@ -14,7 +14,7 @@ router.use('/soc', socRouter); // для socRoute и тд...
 router.use('/theme', themeRoter);
 router.use('/project', projectRouter);  
 router.use('/post', postRouter);
-router.use('/telegram', planRouter);    
+router.use('/telegram', planRouter);
 
 
 module.exports = router;
