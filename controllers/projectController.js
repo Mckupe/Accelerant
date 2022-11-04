@@ -11,7 +11,7 @@ class projectController {
      */// доступна всем
 
     async addProject(req, res, next) {
-        const {userid, name} = req.body;
+        const {userid, username, name} = req.body;
         if (!name) {
             return next(apiError.badRequest('Введите название проекта!'));
         }
@@ -22,7 +22,7 @@ class projectController {
                 return next(apiError.badRequest('Проект с таким названием уже существует!'));
             }
             else { 
-                const project = await Project.create({name: name});
+                const project = await Project.create({name: name, nameCreator: username, arraySoc: [], favorit: false});
                 const rule = await Rules.create({
                     readAndCreateDraft: true,
                     readTalkAndPlan: true,
@@ -62,14 +62,14 @@ class projectController {
      * @param {string} name - название проекта
      */// доступна только с правами создателя/администратора
 
-    async updateName(req, res, next) {
-        const {userid, projectid, name} = req.body;
+    async update(req, res, next) {
+        const {userid, projectid, name, favorit} = req.body;
         if (!projectid || !name) { 
             return next(apiError.badRequest('Отсутсвует projecid или name!')); 
         }
         const rule = await ruleController.getRules(userid, projectid);
         if (rule.superuser) {
-            const project = await Project.update({name: name}, {where: {id: projectid}});
+            const project = await Project.update({name: name, favorit: favorit}, {where: {id: projectid}});
             return res.json({project: project});
         }
         else return next(apiError.forbidden('Недостаточно прав!'));

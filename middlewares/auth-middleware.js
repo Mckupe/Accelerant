@@ -16,6 +16,7 @@ module.exports = function(req, res, next) {
         const userData = tokenController.validateAccess(accessToken); // валидируется ли он
         if (!userData) return next(apiError.unauthorized('Ошибка валидации!'));
         req.body.userid = userData.id; // возвращаем userID
+        req.body.username = userData.name;
         next();
     } catch (error) {
         return error;

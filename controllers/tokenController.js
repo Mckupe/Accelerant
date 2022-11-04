@@ -10,9 +10,9 @@ class tokenController {
      * Пара токенов access, refresh
      */
 
-    genereteToken(id, email) {
-        const accessToken = jwt.sign({id: id, email}, process.env.SECRET_KEY, {expiresIn: '1h'});
-        const refreshToken = jwt.sign({id: id, email}, process.env.REFRESH_KEY, {expiresIn: '15d'});
+    genereteToken(id, name, email) {
+        const accessToken = jwt.sign({id: id, name, email}, process.env.SECRET_KEY, {expiresIn: '1h'});
+        const refreshToken = jwt.sign({id: id, name, email}, process.env.REFRESH_KEY, {expiresIn: '15d'});
         return { accessToken, refreshToken }
     }
 

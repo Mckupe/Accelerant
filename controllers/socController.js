@@ -1,4 +1,4 @@
-const {SocNet} = require('../models/models');
+const {SocNet, Project} = require('../models/models');
 const ruleController = require('./ruleController');
 const apiError = require('../error/apiError');
 
@@ -21,6 +21,10 @@ class socController {
         const rule = await ruleController.getRules(userid, projectid);
         if (rule.superuser) {
             const soc = await SocNet.create({socnet: socnet, link: link, token: token, projectId: projectid});
+            const project = await Project.findOne({where: {id: projectid}});
+            const arrSoc = project.arraySoc;
+            arrSoc.push(socnet);
+            await Project.update({arraySoc: arrSoc}, {where: {id: projectid}});
             return res.json({soc: soc});
         }
         else return next(apiError.forbidden('Недостаточно прав!'));

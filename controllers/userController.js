@@ -23,13 +23,13 @@ class userController {
         if (!candidate) {
             const hashpass = await bcrypt.hash(password, 5);
             const user = await User.create({username: username, email: email, password: hashpass});
-            const tokens = tokenController.genereteToken(user.id, email);
+            const tokens = tokenController.genereteToken(user.id, username, email);
             await tokenController.saveToken(user.id, tokens.refreshToken);
             res.cookie('refreshToken', tokens.refreshToken, {
                 maxAge: 15 * 24 * 60 * 60 * 1000,
                 httpOnly: true
             });
-            return res.json({token: tokens.accessToken});
+            return res.json({token: tokens.accessToken, username: username});
         } else {
             return next(apiError.badRequest('Пользователь с таким email уже существует!'));
         }
@@ -51,13 +51,13 @@ class userController {
             let comppass = bcrypt.compareSync(password, candidate.password);
             if (!comppass) { return next(apiError.internal('Указан неверный пароль!')); }
             else {
-                const tokens = tokenController.genereteToken(candidate.id, email);
+                const tokens = tokenController.genereteToken(candidate.id, candidate.username, email);
                 await tokenController.saveToken(candidate.id, tokens.refreshToken);
                 res.cookie('refreshToken', tokens.refreshToken, {
                     maxAge: 15 * 24 * 60 * 60 * 1000,
                     httpOnly: true
                 });
-                return res.json({token: tokens.accessToken});
+                return res.json({token: tokens.accessToken, username: candidate.username});
             }
         } else {
             return next(apiError.internal('Пользователь не найден!'));
@@ -88,7 +88,7 @@ class userController {
         const findToken = await tokenController.findToken(refreshToken);
         if (!userData || !findToken) return next(apiError.internal('Отсутсвует токен или userdata!'));
         const user = await User.findOne({where: {id: userData.id}});
-        const tokens = tokenController.genereteToken(user.id, user.email);
+        const tokens = tokenController.genereteToken(user.id, user.username, user.email);
         await tokenController.saveToken(user.id, tokens.refreshToken);
         res.cookie('refreshToken', tokens.refreshToken, {
             maxAge: 15 * 24 * 60 * 60 * 1000,

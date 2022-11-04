@@ -21,7 +21,10 @@ const ProjectUsers = sequelize.define('projectusers', {
 
 const Project = sequelize.define('project', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, allowNull: false} // имя проекта
+    name: {type: DataTypes.STRING, allowNull: false}, // имя проекта
+    nameCreator: {type: DataTypes.STRING, allowNull: false},
+    arraySoc: {type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false},
+    favorit: {type: DataTypes.BOOLEAN, allowNull: false}
 })
 
 const SocNet = sequelize.define('socnet', {
