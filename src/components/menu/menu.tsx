@@ -21,8 +21,8 @@ const Menu = () => {
                     </NavLink>
                 </div>
                 <div className={styles.container__nameproject} style={{display: projectStore.projectData.name ? 'flex' : 'none'}}>{projectStore.projectData.name}</div>
-                <div className={styles.container__menu} style={{display: projectStore.projectData.name  ? 'flex' : 'none'}}>
-                    <div className={styles.logoandtext__block}>
+                <div className={styles.container__menu} >
+                    <div className={styles.logoandtext__block} style={{display: projectStore.projectData.name  ? 'flex' : 'none'}}>
                         <span className={styles.newpost}></span>
                         <div className={styles.menu_text}>Новый пост</div>
                     </div>
@@ -42,10 +42,10 @@ const Menu = () => {
                         <span className={styles.anal}></span>
                         <div className={styles.menu_text}>Аналитика</div>
                     </div>
-                    <div className={styles.logoandtext__block}>
+                    <NavLink to='/settings' className={(props) => props.isActive ? styles.logoandtext__active : styles.logoandtext__block}>
                         <span className={styles.settings}></span>
                         <div className={styles.menu_text}>Настройки</div>
-                    </div>
+                    </NavLink>
                 </div>
             </div>
             <div>
