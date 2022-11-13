@@ -1,0 +1,53 @@
+.filters{
+    margin: 0px 0px 0px 40px;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.filter {
+    width: max-content;
+    height: 42px;
+    padding: 0px 14px 0px 14px;
+    margin-right: 24px;
+    margin-top: 16px;
+    border-radius: 8px;
+    border: none;
+
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    color: black;
+    font-family: 'Inter';
+    cursor: pointer;
+    background: #F9ECAB;
+    border: none;
+
+    .selected{
+        background-color: #A8A8A8
+    }
+
+    &:hover {
+        background-color: #F9E47C;
+        transition: .2s;
+    }
+}
+
+.adder {
+    width: 40px;
+    height: 40px;
+    background: url('../../static/plus.svg') no-repeat  center;
+    margin-top: 16px;
+    font-family: 'Inter';
+    cursor: pointer;  
+    border: none;
+    &:hover {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: none;
+        background: url('../../static/plus.svg') no-repeatcenter;
+        background-color: #D4D4D4;
+        transition: .2s;
+    }
+}
