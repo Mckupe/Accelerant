@@ -1,9 +1,10 @@
-import styles from './sas.module.scss';
+import styles from './changefilters.module.scss';
 import axios from 'axios';
 import { useState } from 'react';
 import { tokenStore } from '../../../stores/tokenStore';
 import { modalStore } from '../../../stores/modalStore';
 import { observer } from 'mobx-react-lite';
+import AdderFilter from '../../adderfilter/adderfilter';
 
 
 type ProjectProps = {
@@ -11,7 +12,7 @@ type ProjectProps = {
     name: string;
 }
 
-const Sas = ({ id, name, }: ProjectProps) => {
+const Changefilters = ({ id, name, }: ProjectProps) => {
     const [valid, setValid] = useState(true);
     const [value, setValue] = useState('');
 
@@ -27,14 +28,14 @@ const Sas = ({ id, name, }: ProjectProps) => {
             await axios({
                 method: 'post',
                 url: 'http://localhost:5000/api/project/add',
-                headers: {'Authorization': 'Bearer ' + tokenStore.token},
+                headers: { 'Authorization': 'Bearer ' + tokenStore.token },
                 data: {
-                    name: value 
+                    name: value
                 }
-                }).then((response) => {
-                    return console.log(response.data);
-                }).catch((error) => {
-                    return console.log(error.response.data.message);
+            }).then((response) => {
+                return console.log(response.data);
+            }).catch((error) => {
+                return console.log(error.response.data.message);
             });
             modalStore.changeModal(false);
             modalStore.changeAddModal(true);
@@ -44,19 +45,23 @@ const Sas = ({ id, name, }: ProjectProps) => {
     function changeValue(e: any) {
         setValue(e.target.value);
     }
+
     return (
         <div data-name={name} data-id={id} className={styles.container}>
             <div className={styles.head}>
                 <div className={styles.head__text}>
-                    Название проекта
+                    Темы
                 </div>
             </div>
             <div className={styles.main}>
-                <input type="text" pattern='.{1,}' value={value} onChange={changeValue} className={valid ? styles.input : styles.input__invalid} required />
-                <button onClick={buttonClick} className={styles.buttons__save}>Сохранить</button>
+                <AdderFilter/>
+                <div className={styles.buttons}>
+                    <button onClick={buttonClick} className={styles.buttons__delete}>Удалить</button>
+                    <button onClick={buttonClick} className={styles.buttons__reduct}>Редактировать</button>
+                </div>
             </div>
         </div>
     )
 }
 
-export default Sas;
+export default Changefilters;

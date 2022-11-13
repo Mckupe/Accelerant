@@ -8,12 +8,9 @@ import { useState } from 'react';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
 import Header from '../../components/header/header';
-import Sas from '../../components/settings/sas/sas';
-import Sas2 from '../../components/settings/sas2/sas2';
-import Sas3 from '../../components/settings/sas3/sas3';
-//import Adder from '../../components/adder/adder';
-import Modal from '../../components/modal/modal';
-//import Project from '../../components/project/project';
+import Changename from '../../components/settings/changename/changename';
+import Changefilters from '../../components/settings/changefilters/changefilters';
+import Сhangesoc from '../../components/settings/changesoc/changesoc';
 import { modalStore } from '../../stores/modalStore';
 
 type ObjectProject = {
@@ -84,9 +81,9 @@ function Projectpage() {
                <Header text={'Настройки проекта'}/>
                <div className={styles.main}>
                     <div className={styles.settings}>
-                        <Sas id={projectStore.projectData.id} name={projectStore.projectData.name}/>
-                        <Sas2 id={projectStore.projectData.id} name={projectStore.projectData.name}/>
-                        <Sas3 id={projectStore.projectData.id} name={projectStore.projectData.name}/> 
+                        <Changename id={projectStore.projectData.id} name={projectStore.projectData.name}/>
+                        <Changefilters id={projectStore.projectData.id} name={projectStore.projectData.name}/>
+                        <Сhangesoc id={projectStore.projectData.id} name={projectStore.projectData.name}/> 
                         <button onClick={buttonClick} className={styles.button}>Удалить проект</button>          
                     </div>
                     

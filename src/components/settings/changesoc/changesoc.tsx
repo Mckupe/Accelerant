@@ -1,10 +1,9 @@
-import styles from './sas2.module.scss';
+import styles from './changesoc.module.scss';
 import axios from 'axios';
 import { useState } from 'react';
 import { tokenStore } from '../../../stores/tokenStore';
 import { modalStore } from '../../../stores/modalStore';
 import { observer } from 'mobx-react-lite';
-import AdderFilter from '../../../components/adderfilter/adderfilter';
 
 
 type ProjectProps = {
@@ -12,7 +11,7 @@ type ProjectProps = {
     name: string;
 }
 
-const Sas2 = ({ id, name, }: ProjectProps) => {
+const Сhangesoc = ({ id, name, }: ProjectProps) => {
     const [valid, setValid] = useState(true);
     const [value, setValue] = useState('');
 
@@ -50,18 +49,28 @@ const Sas2 = ({ id, name, }: ProjectProps) => {
         <div data-name={name} data-id={id} className={styles.container}>
             <div className={styles.head}>
                 <div className={styles.head__text}>
-                    Темы
+                    Подключение соцсетей
                 </div>
             </div>
             <div className={styles.main}>
-                <AdderFilter/>
-                <div className={styles.buttons}>
-                    <button onClick={buttonClick} className={styles.buttons__delete}>Удалить</button>
-                    <button onClick={buttonClick} className={styles.buttons__reduct}>Редактировать</button>
+                <div className={styles.logoandtext__block}>
+                    <span className={styles.vk}></span>
+                    <div className={styles.menu_text}>Вконтакте</div>
+                    <button onClick={buttonClick} className={styles.button}>Подключить</button>
+                </div>
+                <div className={styles.logoandtext__block}>
+                    <span className={styles.tg}></span>
+                    <div className={styles.menu_text}>Вконтакте</div>
+                    <button onClick={buttonClick} className={styles.button}>Подключить</button>
+                </div>
+                <div className={styles.logoandtext__block}>
+                    <span className={styles.insta}></span>
+                    <div className={styles.menu_text}>Вконтакте</div>
+                    <button onClick={buttonClick} className={styles.button}>Подключить</button>
                 </div>
             </div>
         </div>
     )
 }
 
-export default Sas2;
+export default Сhangesoc;
