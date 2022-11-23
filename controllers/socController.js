@@ -36,7 +36,7 @@ class socController {
      */// доступна всем
 
     async getSoc(req, res, next) {
-        const {projectid} = req.body;
+        const {projectid} = req.query;
         if (!projectid) {
             return next(apiError.badRequest('Отсутствует projectid!'));
         }

@@ -51,15 +51,16 @@ const Rules = sequelize.define('rules', {
 })
 
 const Post = sequelize.define('post', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    text: {type: DataTypes.STRING, allowNull: false}, // текст поста
-    time: {type: DataTypes.STRING}, // время публикации
-    draft: {type: DataTypes.BOOLEAN}, // черновик?
-    talk: {type: DataTypes.BOOLEAN}, // обсуждение?
-    plan: {type: DataTypes.BOOLEAN}, // запланирован?
-    socnetId: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false}, // массив id соцсетей
-    themeId: {type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false} // массив id тем
-})
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	text: { type: DataTypes.STRING }, // текст поста
+	time: { type: DataTypes.STRING }, // время публикации
+	draft: { type: DataTypes.BOOLEAN }, // черновик?
+	talk: { type: DataTypes.BOOLEAN }, // обсуждение?
+	plan: { type: DataTypes.BOOLEAN }, // запланирован?
+	socnetId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id соцсетей
+	themeId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id тем
+	nameCreator: { type: DataTypes.STRING, allowNull: false} // имя создателя
+});
 
 const Img = sequelize.define('img', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -68,7 +69,8 @@ const Img = sequelize.define('img', {
 
 const Comment = sequelize.define('comment', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    comment: {type: DataTypes.STRING, allowNull: false} // текст комментария
+    text: {type: DataTypes.STRING, allowNull: false}, // текст комментария
+    nameCreator: {type: DataTypes.STRING, allowNull: false}
 })
 
 User.belongsToMany(Project, {through: ProjectUsers});

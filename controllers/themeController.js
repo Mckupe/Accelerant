@@ -36,7 +36,7 @@ class themeController {
      */// доступна всем
 
     async getThemes(req, res, next) {
-        const {projectid} = req.body;
+        const {projectid} = req.query;
         if (!projectid) {
             return next(apiError.badRequest('Отсутствует projectid!'));
         }
