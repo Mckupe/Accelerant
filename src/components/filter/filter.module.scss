@@ -1,53 +1,53 @@
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 41px;
-    margin: 16px 57px 0px 57px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 41px;
+	margin: 16px 57px 0px 57px;
 }
 
 .filter__text {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
-    color: #2A2C2A;
-    margin-right: 40px;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #2a2c2a;
+	margin-right: 40px;
 }
 
 select {
-    width: 89px;
-    height: 41px;
-    background: #E6E6E6;
-    border-radius: 8px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: url('../../static/arr.svg') no-repeat right 12px bottom 15px;
-    padding: 0px 12px 0px 12px;
-    background-color: #E6E6E6;
-    border: none;
+	width: 89px;
+	height: 41px;
+	background: #e6e6e6;
+	border-radius: 8px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: url('../../static/arr.svg') no-repeat right 12px bottom 15px;
+	padding: 0px 12px 0px 12px;
+	background-color: #e6e6e6;
+	border: none;
 
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
-    color: #2A2C2A;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #2a2c2a;
 
-    transition: .2s;
-    cursor: pointer;
+	transition: 0.2s;
+	cursor: pointer;
 
-    &:hover {
-        background-color: #D4D4D4;
-        transition: .2s;
-    }
+	&:hover {
+		background-color: #d4d4d4;
+		transition: 0.2s;
+	}
 
-    &:focus {
-        outline: none;
-    }
+	&:focus {
+		outline: none;
+	}
 }
 
 .select {
-    width: 24px;
-    height: 24px;
-    background: url('../../static/select.svg');
-    cursor: pointer;
+	width: 24px;
+	height: 24px;
+	background: url('../../static/select.svg');
+	cursor: pointer;
 }

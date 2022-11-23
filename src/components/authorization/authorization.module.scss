@@ -1,242 +1,251 @@
 .auth__container {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    width: 614px;
-    height: 773px;
+	width: 614px;
+	height: 773px;
 
-    margin: 125px 0px 125px 0px;
+	margin: 125px 0px 125px 0px;
 
-    background: #FFFFFF;
-    box-shadow: 0px 0px 12px rgba(92, 102, 107, 0.4);
-    border-radius: 16px;
+	background: #ffffff;
+	box-shadow: 0px 0px 12px rgba(92, 102, 107, 0.4);
+	border-radius: 16px;
 }
 
 .container__text {
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 140%;
-    color: #2A2C2A;
+	font-weight: 700;
+	font-size: 32px;
+	line-height: 140%;
+	color: #2a2c2a;
 
-    margin: 48px 0px 0px 64px;
+	margin: 48px 0px 0px 64px;
 }
 
 .container__input {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    margin: 32px 64px 0px 64px;
+	margin: 32px 64px 0px 64px;
 }
 
 .input__text {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
-    color: #7C807D;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #7c807d;
 
-    margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .input {
-    position: relative;
-    box-sizing: border-box;
-    height: 64px;
+	position: relative;
+	box-sizing: border-box;
+	height: 64px;
 
-    background: #F2F2F2;
+	background: #f2f2f2;
 
-    border: 2px solid #D7D7D7;
-    border-radius: 8px;
+	border: 2px solid #d7d7d7;
+	border-radius: 8px;
 
-    padding: 0px 20px 0px 20px;
-    font-size: 24px;
-    font-family: 'Inter';
+	padding: 0px 20px 0px 20px;
+	font-size: 24px;
+	font-family: 'Inter';
 
-    &:focus {
-        outline: none;
-        border: 2px solid #6b6b6b;
-    }
+	&:focus {
+		outline: none;
+		border: 2px solid #6b6b6b;
+	}
 }
 
 .eye {
-    position: absolute;
-    display: flex;
-    align-self: flex-end;
-    width: 20px;
-    height: 16px;
-    margin: 54px 18px 0px 0px;
-    z-index: 2;
-    background: url('../../static/eye.svg') no-repeat center;
-    cursor: pointer;
+	position: absolute;
+	display: flex;
+	align-self: flex-end;
+	width: 20px;
+	height: 16px;
+	margin: 54px 18px 0px 0px;
+	z-index: 2;
+	background: url('../../static/eye.svg') no-repeat center;
+	cursor: pointer;
 }
 
 .input__invalid {
-    box-sizing: border-box;
-    height: 64px;
+	box-sizing: border-box;
+	height: 64px;
 
-    background: #F2F2F2;
+	background: #f2f2f2;
 
-    border: 2px solid #D7D7D7;
-    border-radius: 8px;
+	border: 2px solid #d7d7d7;
+	border-radius: 8px;
 
-    padding: 0px 20px 0px 20px;
-    font-size: 24px;
-    font-family: 'Inter';
+	padding: 0px 20px 0px 20px;
+	font-size: 24px;
+	font-family: 'Inter';
 
-    &:focus {
-        outline: none;
-        border: 2px solid #6b6b6b;
-    }
+	&:focus {
+		outline: none;
+		border: 2px solid #6b6b6b;
+	}
 
-    &:invalid {
-        animation: shake .3s;
-        border-color: rgb(255, 92, 92);
-    }
+	&:invalid {
+		animation: shake 0.3s;
+		border-color: rgb(255, 92, 92);
+	}
 }
 
 @keyframes shake {
-    25% {transform: translateX(4px); border-color: rgb(255, 92, 92);}
-    50% {transform: translateX(-4px); border-color: rgb(255, 92, 92);}
-    75% {transform: translateX(4px); border-color: rgb(255, 92, 92);}   
+	25% {
+		transform: translateX(4px);
+		border-color: rgb(255, 92, 92);
+	}
+	50% {
+		transform: translateX(-4px);
+		border-color: rgb(255, 92, 92);
+	}
+	75% {
+		transform: translateX(4px);
+		border-color: rgb(255, 92, 92);
+	}
 }
 
 .container__check {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 29px 64px 40px 64px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 29px 64px 40px 64px;
 
-    font-size: 16px;
-    font-weight: 500;
+	font-size: 16px;
+	font-weight: 500;
 }
 
 .check__text {
-    font-size: 16px;
-    color: #2A2C2A;
-    line-height: 140%;
-    margin-left: 12px;
+	font-size: 16px;
+	color: #2a2c2a;
+	line-height: 140%;
+	margin-left: 12px;
 }
 
 .check__forgot {
-    text-decoration: none;
-    color: #38A8FF;
+	text-decoration: none;
+	color: #38a8ff;
 }
 
 .check__checkbox {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .check {
-    margin: 0;
-    position: absolute;
-    opacity: 0;
-    z-index: 2;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
+	margin: 0;
+	position: absolute;
+	opacity: 0;
+	z-index: 2;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
 
-    &+label::before {
-        content: '';
-        box-sizing: border-box;
-        display: flex;
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
-        flex-grow: 0;
-        border: 1px solid #D7D7D7;
-        border-radius: 4px;
-        background: #F2F2F2;
-    }
+	& + label::before {
+		content: '';
+		box-sizing: border-box;
+		display: flex;
+		width: 24px;
+		height: 24px;
+		flex-shrink: 0;
+		flex-grow: 0;
+		border: 1px solid #d7d7d7;
+		border-radius: 4px;
+		background: #f2f2f2;
+	}
 
-    &:checked+label::before {
-        background: url('../../static/check.svg') no-repeat;
-        background-position: right 3px bottom 5px;
-        background-color: #38A8FF;
-        border: none;
-    }
+	&:checked + label::before {
+		background: url('../../static/check.svg') no-repeat;
+		background-position: right 3px bottom 5px;
+		background-color: #38a8ff;
+		border: none;
+	}
 }
 
 .container__button {
-    width: 486px;
-    min-height: 64px;
-    align-self: center;
-    border: none;
-    border-radius: 12px;
-    background-color: #38A8FF;
-    color: white;
-    font-weight: 600;
-    font-family: 'Inter';
-    font-size: 16px;
-    line-height: 140%;
-    cursor: pointer;
+	width: 486px;
+	min-height: 64px;
+	align-self: center;
+	border: none;
+	border-radius: 12px;
+	background-color: #38a8ff;
+	color: white;
+	font-weight: 600;
+	font-family: 'Inter';
+	font-size: 16px;
+	line-height: 140%;
+	cursor: pointer;
 }
 
 .container__br {
-    display: flex;
-    align-items: center;
-    margin: 44px 64px 32px 64px;
+	display: flex;
+	align-items: center;
+	margin: 44px 64px 32px 64px;
 
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
-    color: #2A2C2A;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #2a2c2a;
 
-    align-self: center;
+	align-self: center;
 
-    &::before {
-        content: '';
-        margin-right: 16px;
-        width: 162px;
-        height: 1px;
-        background: black;
-    }
+	&::before {
+		content: '';
+		margin-right: 16px;
+		width: 162px;
+		height: 1px;
+		background: black;
+	}
 
-    &::after {
-        content: '';
-        margin-left: 16px;
-        width: 162px;
-        height: 1px;
-        background: black;
-    }
+	&::after {
+		content: '';
+		margin-left: 16px;
+		width: 162px;
+		height: 1px;
+		background: black;
+	}
 }
 .container__socnet {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .socnet__vk {
-    display: flex;
-    width: 48px;
-    height: 48px;
-    margin-right: 25px;
-    background: url('../../static/vk.svg') no-repeat right 12px bottom 15px;
-    background-color: #2787F5;
-    background-size: 26px;
-    border-radius: 50%;
+	display: flex;
+	width: 48px;
+	height: 48px;
+	margin-right: 25px;
+	background: url('../../static/vk.svg') no-repeat right 12px bottom 15px;
+	background-color: #2787f5;
+	background-size: 26px;
+	border-radius: 50%;
 }
 
 .socnet__tg {
-    display: flex;
-    width: 48px;
-    height: 48px;
-    background: url('../../static/tg.svg') no-repeat right 12px bottom 12px;
-    background-color: #36ACF2;
-    background-size: 26px;
-    border-radius: 50%;
+	display: flex;
+	width: 48px;
+	height: 48px;
+	background: url('../../static/tg.svg') no-repeat right 12px bottom 12px;
+	background-color: #36acf2;
+	background-size: 26px;
+	border-radius: 50%;
 }
 
 .container__footer {
-    margin: 56px 0px 0px 64px;
+	margin: 56px 0px 0px 64px;
 
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
 
-    &>span {
-        text-decoration: none;
-        color: #38A8FF;
-        cursor: pointer;
-    }
+	& > span {
+		text-decoration: none;
+		color: #38a8ff;
+		cursor: pointer;
+	}
 }

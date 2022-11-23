@@ -1,0 +1,91 @@
+@import '../../variables.scss';
+
+.container {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 180px;
+	height: 180px;
+	background: #ffffff;
+	box-shadow: 0px 0px 8px rgba(92, 102, 107, 0.25);
+	border-radius: 8px;
+	margin-right: 24px;
+	margin-bottom: 24px;
+	padding: 8px 14px 8px 14px;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.head {
+	display: flex;
+	justify-content: space-between;
+	max-height: 16.8px;
+}
+
+.head__date {
+	@include font-400;
+	color: #7c807d;
+}
+
+.head__themes {
+	display: flex;
+}
+
+.theme {
+	box-sizing: border-box;
+	@include font-400;
+	color: white;
+	border-radius: 6px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	white-space: nowrap;
+    overflow: hidden;
+	text-overflow: clip;
+	margin-left: 4px;
+	
+}
+
+.text {
+	@include font-400;
+	color: #2a2c2a;
+	height: 51px;
+	
+}
+
+.spans {
+	overflow: hidden;
+	word-break: break-word;
+	white-space: wrap;
+	max-height: 51px;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical; 
+}
+
+.img {
+	height: 35px;
+}
+
+.main {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	border-top: solid 1.4px#D7D7D7;
+	margin: 0px -4px 0px -4px;
+	padding: 0px 4px 0px 4px;
+}
+
+.main__container {
+	display: flex;
+	margin: 6px 0px 4px 0px;
+}
+
+.main__user {
+	font-weight: 400;
+	line-height: 140%;
+	font-size: 12px;
+	color: #2a2c2a;
+}

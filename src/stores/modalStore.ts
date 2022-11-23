@@ -1,29 +1,60 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
 class modalDataStore {
+	modalProject = false;
+	modalPost = false;
+	modalTalk = false;
+	modalTheme = false;
+	modalTg = false;
+	modalMore = false;
+	addProject = false;
+	addPost = false;
+	addTheme = false;
+	addTg = false;
 
-    modal = this.resetModal();
-    addModal = this.resetAddModal();
+	constructor() {
+		makeAutoObservable(this);
+	}
 
-    resetModal() {
-        return (false);
-    }
+	changeModalProject() {
+		this.modalProject = !this.modalProject;
+	}
 
-    resetAddModal() {
-        return (false);
-    }
+	changeAddProject() {
+		this.addProject = !this.addProject;
+	}
 
-    constructor() {
-        makeAutoObservable(this)
-    }
+	changeAddPost() {
+		this.addPost = !this.addPost;
+	}
 
-    changeModal(modal: boolean) {
-        this.modal = modal;
-    }
+	changeAddTheme() {
+		this.addTheme = !this.addTheme;
+	}
 
-    changeAddModal(modal: boolean) {
-        this.addModal = modal;
-    }
+	changeModalPost() {
+		this.modalPost = !this.modalPost;
+	}
+
+	changeModalTalk() {
+		this.modalTalk = !this.modalTalk;
+	}
+
+	changeModalTheme() {
+		this.modalTheme = !this.modalTheme;
+	}
+
+	changeModalTg() {
+		this.modalTg = !this.modalTg;
+	}
+
+	changeModalMore() {
+		this.modalMore = !this.modalMore;
+	}
+
+	changeAddTg() {
+		this.addTg = !this.addTg;
+	}
 }
 
 export const modalStore = new modalDataStore();

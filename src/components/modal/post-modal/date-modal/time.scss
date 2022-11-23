@@ -1,0 +1,44 @@
+@import '../../../../variables.scss';
+
+.time {
+	@include font-500;
+	width: 138px;
+	height: 32px;
+}
+
+.ant-picker-time-panel-column {
+	width: 67px !important;
+	overflow: hidden;
+
+	&::-webkit-scrollbar {
+		width: 0;
+	}
+}
+
+.ant-picker-panel-layout{
+	display: flex;
+	justify-content: center !important;
+	width: 139px;
+}
+
+.ant-picker-time-panel-cell-inner {
+	padding-inline-start: 16px;
+}
+
+.ant-picker-time-panel {
+	max-height: 210px;
+	width: 200px;
+}
+
+.ant-picker-content {
+	width: 200px;
+	max-height: 202px;
+}
+
+.ant-picker-time-panel-cell-inner {
+	width: 59px !important;
+	display: flex !important;
+	justify-content: center !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}

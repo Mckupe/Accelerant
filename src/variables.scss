@@ -1,0 +1,74 @@
+@mixin font-700 {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 140%;
+	color: #2a2c2a;
+}
+
+@mixin font-500 {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #2a2c2a;
+}
+
+@mixin font-400 {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 140%;
+	color: #2a2c2a;
+}
+
+.telega {
+	box-sizing: content-box;
+	height: 46px;
+	width: 46px;
+	background: url('./static/tg.svg') no-repeat center;
+	background-size: 48px;
+	cursor: pointer;
+	border-radius: 50%;
+	border: 2px solid white;
+
+	appearance: none;
+
+	&:checked {
+		box-shadow: 0px 0px 0px 3px #b7b7b7;
+	}
+
+	&:hover {
+		opacity: .7;
+	}
+}
+
+.vk {
+	box-sizing: content-box;
+	height: 46px;
+	width: 46px;
+	background: url('./static/vk.svg') no-repeat center;
+	background-size: 48px;
+	cursor: pointer;
+	border-radius: 50%;
+	border: 2px solid white;
+
+	appearance: none;
+
+	&:checked {
+		box-shadow: 0px 0px 0px 3px #b7b7b7;
+	}
+
+	&:hover {
+		opacity: .7;
+	}
+}
+
+.socs {
+	width: 112px;
+	display: flex;
+	justify-content: space-between;
+}

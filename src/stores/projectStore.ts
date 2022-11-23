@@ -1,69 +1,39 @@
-import { makeAutoObservable } from "mobx";
-
-type ObjectProject = {
-    id: number;
-    name: string;
-    nameCreator: string;
-    arraySoc: Array<string>;
-    favorit: boolean;
-}
-
+import { makeAutoObservable } from 'mobx';
+import { oneProjectStore } from './oneProjectStore';
 class projectDataStore {
+	arrayProjectData: ObjectProject[] = this.resetArrayProjectData();
 
-    activeProject = {id: 0, name: ''};
-    projectData: ObjectProject = this.resetProjectData();
-    arrayProjectData: ObjectProject[] = this.resetArrayProjectData();
+	resetArrayProjectData() {
+		return [];
+	}
 
-    resetProjectData() {
-        return ({
-            id: 0,
-            name: '',
-            nameCreator: '',
-            arraySoc: [''],
-            favorit: false
-        });
-    }
+	constructor() {
+		makeAutoObservable(this);
+	}
 
-    resetArrayProjectData() {
-        return ([]);
-    }
+	addProject() {
+		this.arrayProjectData.push(oneProjectStore.projectData);
+		oneProjectStore.projectData = oneProjectStore.resetProjectData();
+	}
 
-    constructor() {
-        makeAutoObservable(this)
-    }
+	resetArray() {
+		this.arrayProjectData = this.resetArrayProjectData();
+	}
 
-    changeActiveProject(id: number, name: string) {
-        this.activeProject.id = id;
-        this.activeProject.name = name;
-    }
-     
-    changeProjectData(project: ObjectProject) {
-        this.projectData.id = project.id;
-        this.projectData.name = project.name;
-        this.projectData.nameCreator = project.nameCreator;
-        this.projectData.arraySoc = project.arraySoc;
-        this.projectData.favorit = project.favorit;
-    }
+	favorit(id: number) {
+		const index = this.arrayProjectData
+			.map(project => project.id)
+			.indexOf(Number(id));
+		const favorit = (this.arrayProjectData[index].favorit =
+			!this.arrayProjectData[index].favorit);
+		return favorit;
+	}
 
-    addProject() {
-        this.arrayProjectData.push(this.projectData);
-        this.projectData = this.resetProjectData();
-    }
-
-    resetArray() {
-        this.arrayProjectData = this.resetArrayProjectData();
-    }
-
-    favorit(id: number) {
-        const index = this.arrayProjectData.map(project => project.id).indexOf(Number(id));
-        const favorit = this.arrayProjectData[index].favorit = !this.arrayProjectData[index].favorit;
-        return favorit;
-    }
-
-    get sort() {
-        return this.arrayProjectData.slice().sort((x, y) => (x.favorit === y.favorit ? 0 : x.favorit ? -1 : 1));
-        console.log(JSON.parse(JSON.stringify(this.arrayProjectData)));
-    }
+	get sort() {
+		return this.arrayProjectData
+			.slice()
+			.sort((x, y) => (x.favorit === y.favorit ? 0 : x.favorit ? -1 : 1));
+	}
 }
 
 export const projectStore = new projectDataStore();

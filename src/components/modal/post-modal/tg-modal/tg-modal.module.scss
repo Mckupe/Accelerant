@@ -1,0 +1,166 @@
+.black {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 100vw;
+	height: 100vh;
+	background-color: rgb(209, 209, 209);
+	z-index: 102;
+}
+
+.container {
+	position: absolute;
+	box-sizing: border-box;
+	padding: 40px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	min-width: 570px;
+
+	background: #ffffff;
+	border-radius: 16px;
+	opacity: 100%;
+
+	z-index: 112;
+}
+
+.head {
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 140%;
+
+	color: #2a2c2a;
+	margin-bottom: 32px;
+}
+
+.alert {
+	margin-top: -26px;
+	color: rgb(255, 92, 92);
+	margin-bottom: 4px;
+}
+
+.input__text {
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+
+	color: #7c807d;
+
+	margin-bottom: 8px;
+}
+
+.input {
+	box-sizing: border-box;
+	height: 56px;
+
+	background: #f2f2f2;
+
+	border: 2px solid #d7d7d7;
+	border-radius: 8px;
+
+	padding: 0px 20px 0px 20px;
+	font-size: 24px;
+	font-family: 'Inter';
+	margin-bottom: 24px;
+
+	&:focus {
+		outline: none;
+		border: 2px solid #6b6b6b;
+	}
+}
+
+.input__invalid {
+	box-sizing: border-box;
+	height: 56px;
+	width: 390px;
+	background: #f2f2f2;
+
+	border: 2px solid #d7d7d7;
+	border-radius: 8px;
+
+	padding: 0px 20px 0px 20px;
+	font-size: 24px;
+	font-family: 'Inter';
+	margin-bottom: 24px;
+
+	&:focus {
+		outline: none;
+		border: 2px solid #6b6b6b;
+	}
+
+	&:invalid {
+		animation: shake 0.3s;
+		border-color: rgb(255, 92, 92);
+	}
+}
+
+@keyframes shake {
+	25% {
+		transform: translateX(4px);
+		border-color: rgb(255, 92, 92);
+	}
+	50% {
+		transform: translateX(-4px);
+		border-color: rgb(255, 92, 92);
+	}
+	75% {
+		transform: translateX(4px);
+		border-color: rgb(255, 92, 92);
+	}
+}
+
+.input__container {
+	display: flex;
+	flex-direction: column;
+}
+
+.pattern {
+	margin-left: 8px;
+	background-color: rgb(209, 209, 209);
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 2px;
+}
+
+.buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 40px;
+}
+
+.buttons__close {
+	width: 97px;
+	height: 42px;
+	background: #ebebeb;
+	border-radius: 8px;
+	border: none;
+
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	color: #2a2c2a;
+	font-family: 'Inter';
+	cursor: pointer;
+}
+
+.buttons__create {
+	width: 97px;
+	height: 42px;
+	background: #38a8ff;
+	border-radius: 8px;
+	border: none;
+
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 140%;
+	color: #ffffff;
+	font-family: 'Inter';
+	cursor: pointer;
+	transition: 0.2s;
+
+	&:hover {
+		background: #3b95dc;
+		transition: 0.2s;
+	}
+}

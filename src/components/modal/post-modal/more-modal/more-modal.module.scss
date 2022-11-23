@@ -1,0 +1,52 @@
+@import '../../../../variables.scss';
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 146px;
+	height: 88px;
+	background-color: white;
+	box-shadow: 0px 0px 4px rgba(92, 102, 107, 0.25);
+	border-radius: 8px;
+	margin-left: -45px;
+	overflow: hidden;
+}
+
+.more__text {
+	@include font-500;
+	display: flex;
+	align-items: center;
+	height: 44px;
+	cursor: pointer;
+	&:hover {
+		background-color: rgb(233, 233, 233);
+	}
+}
+
+.comment {
+	width: 24px;
+	height: 24px;
+	background: url('../../../../static/comment.svg') no-repeat center;
+	cursor: pointer;
+	margin-right: 8px;
+	margin-left: 4px;
+}
+
+.draft {
+	width: 24px;
+	height: 24px;
+	background: url('../../../../static/draft.svg') no-repeat center;
+	cursor: pointer;
+	margin-right: 8px;
+	margin-left: 4px;
+}
+
+.delete {
+	width: 24px;
+	height: 24px;
+	background: url('../../../../static/delete.svg') no-repeat center;
+	cursor: pointer;
+	margin-right: 8px;
+	margin-left: 4px;
+}
