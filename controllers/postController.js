@@ -30,16 +30,9 @@ class postController {
 			socnetid,
 			themeid,
 			projectid,
-			nameCreator
+			nameCreator,
 		} = req.body;
-		console.log(
-			text,
-			time,
-			socnetid,
-			themeid,
-			projectid,
-			nameCreator
-		);
+		console.log(text, time, socnetid, themeid, projectid, nameCreator);
 		if (!projectid || !time || !socnetid || !themeid || !nameCreator) {
 			return next(
 				apiError.badRequest(
@@ -96,7 +89,7 @@ class postController {
 		if (necrule) {
 			let posts;
 			if (draft === 'true') {
-                console.log('AAAAAAAaaa')
+				console.log('AAAAAAAaaa');
 				posts = await Post.findAll({
 					where: { draft: true, projectId: projectid },
 				});
@@ -111,7 +104,8 @@ class postController {
 			}
 			const respons = [];
 			for (let i = 0; i < posts.length; i++) {
-				const img = await Img.findOne({ where: { postId: posts[i].id } });
+				let img = await Img.findOne({ where: { postId: posts[i].id } });
+				if (!img) img = { img: [] };
 				const file = fs
 					.readFileSync(
 						path.resolve(
@@ -125,7 +119,7 @@ class postController {
 				respons.push({
 					post: posts[i],
 					text: file,
-					img: img,
+					img: img.img,
 				});
 			}
 			return res.json({ posts: respons });
@@ -143,7 +137,8 @@ class postController {
 			return next(apiError.badRequest('Отсутствует postid!'));
 		}
 		const post = await Post.findOne({ where: { id: postid } });
-		const img = await Img.findOne({ where: { postId: post.id } });
+		let img = await Img.findOne({ where: { postId: post.id } });
+		if (!img) img = { img: [] };
 		const file = fs
 			.readFileSync(
 				path.resolve(__dirname, '../static', 'texts', `${post.text}` + '.txt')
@@ -152,7 +147,7 @@ class postController {
 		const response = {
 			post: post,
 			text: file,
-			img: img,
+			img: img.img,
 		};
 		return res.json({ posts: response });
 	}
@@ -171,15 +166,20 @@ class postController {
 	 */ // доступна в зависимоти от типа поста
 
 	async updatePost(req, res, next) {
-		const { userid, postid, text, img, time, draft, talk, plan, socnetid, themeid, projectid } =
-			req.body;
-		if (
-			!postid ||
-			!text ||
-			!time ||
-			!socnetid ||
-			!themeid
-		) {
+		const {
+			userid,
+			postid,
+			text,
+			img,
+			time,
+			draft,
+			talk,
+			plan,
+			socnetid,
+			themeid,
+			projectid,
+		} = req.body;
+		if (!postid || !text || !time || !socnetid || !themeid) {
 			return next(
 				apiError.badRequest(
 					'Отсутствует postid, text, time, draft, talk, plan, socnetid или themeid!'
@@ -197,7 +197,9 @@ class postController {
 				path.resolve(__dirname, '../static', 'texts', `${post.text}` + '.txt'),
 				text
 			);
-			await Img.update({ img: img }, { where: { postId: post.id } });
+			const imgbd = await Img.findOne({ where: { postId: post.id } });
+			if (imgbd) await Img.update({ img: img }, { where: { postId: post.id } });
+			else await Img.create({ postId: post.id, img: img });
 			await Post.update(
 				{
 					time: time,
@@ -224,12 +226,30 @@ class postController {
 			return next(apiError.badRequest('Отсутствует postid!'));
 		}
 		const post = await Post.findOne({ where: { id: postid } });
+		const imgs = await Img.findOne({ where: { postId: post.id } });
 		fs.unlinkSync(
 			path.resolve(__dirname, '../static', 'texts', `${post.text}` + '.txt'),
 			() => {
 				console.log('Файл удален!');
 			}
 		);
+		if (imgs) {
+			for (let i = 0; i < imgs.img.length; i++) {
+				fs.exists(
+					path.resolve(__dirname, '../static', 'imgs', `${imgs[i]}`),
+					exists => {
+						if (exists) {
+							fs.unlinkSync(
+								path.resolve(__dirname, '../static', 'imgs', `${imgs.img[i]}`),
+								() => {
+									console.log('Файл удален!');
+								}
+							);
+						}
+					}
+				);
+			}
+		}
 		await Img.destroy({ where: { postId: post.id } });
 		await Post.destroy({ where: { id: postid } });
 		return res.json('Пост удален!');

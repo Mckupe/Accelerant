@@ -12,9 +12,10 @@ const { v4 } = require('uuid');
 const clients = {};
 const messages = [];
 const http = require('http');
+const fileupload = require("express-fileupload");
 
 const PORT = process.env.PORT || 5000;
-
+app.use(fileupload({}));
 app.use(
 	cors({
 		origin: process.env.HTTP_URL_FRONT,
@@ -23,8 +24,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-
-app.use(express.static(path.resolve(__dirname, 'static'))); // для отдачи файлов как статики, вдруг пригодится
+app.use('/static/imgs', express.static('./static/imgs'));
 app.use('/api', router);
 
 const server = http.createServer(app);
@@ -63,5 +63,4 @@ wss.on('connection', ws => {
 });
 
 app.use(errorMiddleware);
-
 start();
