@@ -8,7 +8,7 @@ class commentController {
 			return next(apiError.badRequest('Отсутствует postid или text!'));
 		}
 		const user = await User.findOne({where: {id: userid}});
-		console.log(user.username);
+		if (!user) return next(apiError.internal('Пользователь не найден!'));
 		const comment = await Comment.create({
 			text: text,
 			postId: postid,

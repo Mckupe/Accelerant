@@ -8,6 +8,7 @@ const postRouter = require('./postRoute');
 const planRouter = require('./telegramRoute');
 const commentRouter = require('./commentRoute');
 const imgRouter = require('./imgRoute');
+const patternRouter = require('./patternRoute');
 
 // здесь находятся только роуты, а конкрентно в index.js они собираются в один
 
@@ -19,5 +20,6 @@ router.use('/post', postRouter);
 router.use('/telegram', planRouter);
 router.use('/comment', commentRouter);
 router.use('/img', imgRouter);
+router.use('/pattern', patternRouter);
 
 module.exports = router;

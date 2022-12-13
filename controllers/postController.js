@@ -27,6 +27,7 @@ class postController {
 			draft,
 			talk,
 			plan,
+			published,
 			socnetid,
 			themeid,
 			projectid,
@@ -57,12 +58,13 @@ class postController {
 				draft: draft,
 				talk: talk,
 				plan: plan,
+				published: published,
 				projectId: projectid,
 				socnetId: socnetid,
 				themeId: themeid,
 				nameCreator: nameCreator,
 			});
-			if (img) await Img.create({ postId: post.id, img: img });
+			if (img.length > 0) await Img.create({ postId: post.id, img: img });
 			return res.json({ post: post });
 		} else return next(apiError.forbidden('Недостаточно прав!'));
 	}
@@ -89,7 +91,6 @@ class postController {
 		if (necrule) {
 			let posts;
 			if (draft === 'true') {
-				console.log('AAAAAAAaaa');
 				posts = await Post.findAll({
 					where: { draft: true, projectId: projectid },
 				});
@@ -175,6 +176,7 @@ class postController {
 			draft,
 			talk,
 			plan,
+			published,
 			socnetid,
 			themeid,
 			projectid,
@@ -206,6 +208,7 @@ class postController {
 					draft: draft,
 					talk: talk,
 					plan: plan,
+					published: published,
 					socnetId: socnetid,
 					themeId: themeid,
 				},
