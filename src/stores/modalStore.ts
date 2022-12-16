@@ -6,6 +6,7 @@ class modalDataStore {
 	modalTalk = false;
 	modalTheme = false;
 	modalTg = false;
+	modalVk = false;
 	modalMore = false;
 	addProject = false;
 	addPost = false;
@@ -46,6 +47,10 @@ class modalDataStore {
 
 	changeModalTg() {
 		this.modalTg = !this.modalTg;
+	}
+
+	changeModalVk() {
+		this.modalVk = !this.modalVk;
 	}
 
 	changeModalMore() {

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { tokenStore } from '../../../stores/tokenStore';
 import { oneProjectStore } from '../../../stores/oneProjectStore';
 import TgModal from './tg-modal/tg-modal';
+import VkModal from './vk-modal/vk-modal';
 import { userStore } from '../../../stores/userdataStore';
 import { useState } from 'react';
 import dayjs from 'dayjs';
@@ -59,9 +60,8 @@ function PostModal({ type, title }: PostProps) {
 				};
 				await axios({
 					method: `${postStore.updatePost ? 'put' : 'post'}`,
-					url: `http://localhost:5000/api/post/${
-						postStore.updatePost ? 'update' : 'add'
-					}`,
+					url: `http://localhost:5000/api/post/${postStore.updatePost ? 'update' : 'add'
+						}`,
 					headers: { Authorization: 'Bearer ' + tokenStore.token },
 					data: postStore.updatePost
 						? { ...data, postid: postStore.activePostId }
@@ -95,9 +95,8 @@ function PostModal({ type, title }: PostProps) {
 		};
 		await axios({
 			method: `${postStore.updatePost ? 'put' : 'post'}`,
-			url: `http://localhost:5000/api/post/${
-				postStore.updatePost ? 'update' : 'add'
-			}`,
+			url: `http://localhost:5000/api/post/${postStore.updatePost ? 'update' : 'add'
+				}`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: postStore.updatePost
 				? { ...data, postid: postStore.activePostId }
@@ -159,8 +158,8 @@ function PostModal({ type, title }: PostProps) {
 							{type === 'post' && postStore.updatePost
 								? 'Публикация'
 								: type === 'draft' && postStore.updatePost
-								? 'Черновик'
-								: title}
+									? 'Черновик'
+									: title}
 						</span>
 						<div className={styles.head__icons}>
 							<div className={styles.eye}></div>
@@ -187,9 +186,13 @@ function PostModal({ type, title }: PostProps) {
 										onClick={() => modalStore.changeModalTg()}
 										className={'telega'}
 									/>
-									<div className={'vk'} />
+									<a
+										onClick={() => modalStore.changeModalVk()}
+										className={'vk'}
+									/>
 								</div>
 								<TgModal />
+								<VkModal />
 							</>
 						) : (
 							postStore.socArray.map((soc: any, key: number) => {
@@ -232,31 +235,31 @@ function PostModal({ type, title }: PostProps) {
 						<div className={styles.themes__container}>
 							{postStore.themeArray.length > 0
 								? postStore.themeArray.map((theme: any, key: number) => {
-										return (
-											<div key={key} style={{ display: 'flex' }}>
-												<input
-													id={theme.id}
-													type='checkbox'
-													className={styles.theme__input}
-													checked={
-														postStore.activeThemeArray.includes(theme.id)
-															? false
-															: true
-													}
-													onChange={() => {}}
-												/>
-												<label
-													data-id={theme.id}
-													onClick={changeThemeArray}
-													htmlFor={theme.id}
-													className={styles.theme}
-													style={{ backgroundColor: `#${theme.color}` }}
-												>
-													{theme.theme}
-												</label>
-											</div>
-										);
-								  })
+									return (
+										<div key={key} style={{ display: 'flex' }}>
+											<input
+												id={theme.id}
+												type='checkbox'
+												className={styles.theme__input}
+												checked={
+													postStore.activeThemeArray.includes(theme.id)
+														? false
+														: true
+												}
+												onChange={() => { }}
+											/>
+											<label
+												data-id={theme.id}
+												onClick={changeThemeArray}
+												htmlFor={theme.id}
+												className={styles.theme}
+												style={{ backgroundColor: `#${theme.color}` }}
+											>
+												{theme.theme}
+											</label>
+										</div>
+									);
+								})
 								: null}
 							<div
 								onClick={() => {

@@ -3,6 +3,8 @@ import Authpage from './pages/authpage/Authpage';
 import Projectpage from './pages/mainpages/Projectpage';
 import Postpage from './pages/mainpages/Postpage';
 import Draftpage from './pages/mainpages/Draftpage';
+import Settings from './pages/mainpages/Settings';
+import Analitics from './pages/mainpages/Analitics';
 
 function App() {
 	return (
@@ -12,6 +14,8 @@ function App() {
 				<Route path='/project' element={<Projectpage />} />
 				<Route path='/posts' element={<Postpage />} />
 				<Route path='/drafts' element={<Draftpage />} />
+				<Route path='/settings' element={<Settings />}/>
+				<Route path='/analitics' element={<Analitics />}/>
 			</Routes>
 		</>
 	);

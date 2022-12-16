@@ -77,18 +77,32 @@ const Menu = () => {
 						<span className={styles.draft}></span>
 						<div className={styles.menu_text}>Черновики</div>
 					</NavLink>
+					<NavLink
+						to='/analitics'
+						className={props =>
+							props.isActive
+								? styles.logoandtext__active
+								: styles.logoandtext__block
+						}
+					>
+						<span className={styles.anal}></span>
+						<div className={styles.menu_text}>Аналитика</div>
+					</NavLink>
 					<div className={styles.logoandtext__block}>
 						<span className={styles.talk}></span>
 						<div className={styles.menu_text}>Обсуждения</div>
 					</div>
-					<div className={styles.logoandtext__block}>
-						<span className={styles.anal}></span>
-						<div className={styles.menu_text}>Аналитика</div>
-					</div>
-					<div className={styles.logoandtext__block}>
+					<NavLink
+						to='/settings'
+						className={props =>
+							props.isActive
+								? styles.logoandtext__active
+								: styles.logoandtext__block
+						}
+					>
 						<span className={styles.settings}></span>
 						<div className={styles.menu_text}>Настройки</div>
-					</div>
+					</NavLink>
 				</div>
 			</div>
 			<div>
