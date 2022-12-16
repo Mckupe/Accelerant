@@ -92,7 +92,7 @@ function Projectpage() {
         <div className={styles.main__container}>
             <Menu/>
             <div className={styles.container}>
-               <Header text={'Настройки проекта'}/>
+               <Header text={'Настройки проекта'} type={'settings'}/>
                <div className={styles.main}>
                     <div className={styles.settings}>
                         <Changename/>
