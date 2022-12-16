@@ -15,6 +15,12 @@ const Token = sequelize.define('token', {
     refreshToken: {type: DataTypes.STRING} // refresh токен
 })
 
+const Pattern = sequelize.define('pattern', {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING, allowNull: false },
+    text: { type: DataTypes.STRING, allowNull: false }
+});
+
 const ProjectUsers = sequelize.define('projectusers', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true} 
 })
@@ -57,9 +63,10 @@ const Post = sequelize.define('post', {
 	draft: { type: DataTypes.BOOLEAN }, // черновик?
 	talk: { type: DataTypes.BOOLEAN }, // обсуждение?
 	plan: { type: DataTypes.BOOLEAN }, // запланирован?
+	published: { type: DataTypes.BOOLEAN },
 	socnetId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id соцсетей
 	themeId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id тем
-	nameCreator: { type: DataTypes.STRING, allowNull: false} // имя создателя
+	nameCreator: { type: DataTypes.STRING, allowNull: false }, // имя создателя
 });
 
 const Img = sequelize.define('img', {
@@ -81,6 +88,7 @@ Project.belongsToMany(User, {through: ProjectUsers});
 
 User.hasMany(Comment); 
 User.hasOne(Token);
+User.hasMany(Pattern);
 
 Project.hasMany(Post);
 Post.belongsTo(Project);
@@ -96,6 +104,7 @@ Post.hasMany(Comment);
 
 module.exports = {
     User,
+    Pattern,
     Project,
     Rules, 
     Post,
