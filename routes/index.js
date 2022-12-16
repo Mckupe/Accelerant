@@ -7,6 +7,7 @@ const projectRouter = require('./projectRoute');
 const postRouter = require('./postRoute');
 const planRouter = require('./telegramRoute');
 const commentRouter = require('./commentRoute');
+const vkRouter = require('./vkRouter');
 const imgRouter = require('./imgRoute');
 const patternRouter = require('./patternRoute');
 
@@ -19,6 +20,7 @@ router.use('/project', projectRouter);
 router.use('/post', postRouter);
 router.use('/telegram', planRouter);
 router.use('/comment', commentRouter);
+router.use('/vk', vkRouter);
 router.use('/img', imgRouter);
 router.use('/pattern', patternRouter);
 
