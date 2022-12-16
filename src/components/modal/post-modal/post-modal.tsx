@@ -15,7 +15,9 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import MoreModal from './more-modal/more-modal';
-import { toJS } from 'mobx';
+import { imgsStore } from '../../../stores/imgsStore';
+import Patterns from './patterns/patterns';
+import { commentStore } from '../../../stores/commentStore';
 
 type PostProps = {
 	type: string;
@@ -24,21 +26,50 @@ type PostProps = {
 
 function PostModal({ type, title }: PostProps) {
 	const [alert, setAlert] = useState('');
+	const [value, setValue] = useState('');
 
-	function resetAll() {
+	async function deleteUpload() {
+		if (imgsStore.activeImgs.length === 0) {
+			return;
+		}
+		await axios({
+			method: 'delete',
+			headers: { Authorization: 'Bearer ' + tokenStore.token },
+			url: 'http://localhost:5000/api/img/delete',
+			data: { imgs: imgsStore.activeImgs },
+		})
+			.then(response => {
+				console.log(response.data);
+				imgsStore.resetActiveImgs();
+			})
+			.catch(error => {
+				console.log(error.response.data.message);
+			});
+	}
+
+	async function resetAll() {
 		modalStore.changeModalPost();
 		postStore.resetActiveArray();
 		setAlert('');
 		if (modalStore.modalMore) modalStore.changeModalMore();
 		if (postStore.updatePost) postStore.changeUpdatePost();
-		if (modalStore.modalTalk) modalStore.changeModalTalk();
+		if (modalStore.modalTalk) {
+			modalStore.changeModalTalk();
+			commentStore.changeCommentArray(commentStore.resetCommentArray());
+		}
 		if (dateStore.currentDate > 0) dateStore.changeCurrentDate(0);
+		if (modalStore.patterns) modalStore.changePatterns();
+		imgsStore.resetActiveImgs();
 	}
 
 	async function addPlanPost() {
 		let time;
 		if (dateStore.currentDate === 0) time = dateStore.dateM + dateStore.timeM;
 		else time = dateStore.currentDate;
+		if (time < Date.now()) {
+			setAlert('Время публикации в прошлом.');
+			return;
+		}
 		if (postStore.activeSocArray.length === 0)
 			setAlert('Пожалуйста, выберите аккаунты для публикации.');
 		else if (postStore.activeThemeArray.length > 3)
@@ -50,6 +81,7 @@ function PostModal({ type, title }: PostProps) {
 				const data = {
 					text: postStore.textPost,
 					time: time,
+					img: imgsStore.activeImgs,
 					draft: false,
 					talk: false,
 					plan: true,
@@ -67,14 +99,28 @@ function PostModal({ type, title }: PostProps) {
 						? { ...data, postid: postStore.activePostId }
 						: data,
 				})
-					.then(response => {
-						console.log(response.data);
+					.then(async response => {
+						if (!postStore.updatePost && dateStore.currentDate === 0) {
+							await axios({
+								method: 'post',
+								url: 'http://localhost:5000/api/telegram/publish',
+								headers: { Authorization: 'Bearer ' + tokenStore.token },
+								data: { postid: response.data.post.id },
+							})
+								.then(response => {
+									console.log(response.data);
+								})
+								.catch(error => {
+									console.log(error.response.data.message);
+								});
+						}
 					})
 					.catch(error => {
 						console.log(error.response.data.message);
 					});
 				resetAll();
 				modalStore.changeAddPost();
+				console.log(imgsStore.activeImgs);
 			}
 		}
 	}
@@ -85,6 +131,7 @@ function PostModal({ type, title }: PostProps) {
 		const data = {
 			text: postStore.textPost,
 			time: dateStore.dateM + dateStore.timeM,
+			img: imgsStore.activeImgs,
 			draft: true,
 			talk: false,
 			plan: false,
@@ -144,13 +191,47 @@ function PostModal({ type, title }: PostProps) {
 		setAlert('');
 	}
 
+	async function uploadFile(e: any) {
+		setValue('');
+		const files = e.target.files;
+		const form = new FormData();
+		for (let i = 0; i < files.length; i++) {
+			form.append('file', files[i]);
+		}
+		await axios({
+			method: `post`,
+			url: `http://localhost:5000/api/img/upload`,
+			headers: { Authorization: 'Bearer ' + tokenStore.token },
+			data: form,
+		})
+			.then(response => {
+				console.log(response.data);
+				response.data.imgs.map((img: string) => {
+					return imgsStore.addActiveImg(img);
+				});
+			})
+			.catch(error => {
+				console.log(error);
+			});
+		if (imgsStore.activeImgs.length > 10) {
+			setAlert('Пост может иметь не больше 10 изображений.');
+		}
+		console.log(imgsStore.activeImgs);
+	}
+
 	if (!modalStore.modalPost) {
 		return null;
 	}
 
 	return (
 		<>
-			<div onClick={resetAll} className={styles.black}></div>
+			<div
+				onClick={() => {
+					if (!postStore.updatePost) deleteUpload();
+					resetAll();
+				}}
+				className={styles.black}
+			></div>
 			<div className={styles.container}>
 				<div>
 					<div className={styles.head}>
@@ -165,14 +246,18 @@ function PostModal({ type, title }: PostProps) {
 							<div className={styles.eye}></div>
 							<div
 								onClick={() => {
+									if (modalStore.modalTalk)
+										commentStore.changeCommentArray(
+											commentStore.resetCommentArray()
+										);
 									modalStore.changeModalTalk();
 								}}
 								className={styles.comment}
 							></div>
 							<div
 								onClick={() => {
-									modalStore.changeModalPost();
-									postStore.resetActiveArray();
+									if (!postStore.updatePost) deleteUpload();
+									resetAll();
 								}}
 								className={styles.exit}
 							></div>
@@ -221,11 +306,41 @@ function PostModal({ type, title }: PostProps) {
 							onChange={changeTextPost}
 							value={postStore.textPost}
 						/>
+						{imgsStore.activeImgs && (
+							<div className={styles.preview__container}>
+								{imgsStore.activeImgs.map((img: string, key: number) => {
+									return (
+										<img
+											className={styles.preview}
+											src={`http://localhost:5000/static/imgs/${img}`}
+											alt=''
+											key={key}
+										/>
+									);
+								})}
+							</div>
+						)}
 						<div className={styles.post__bar}>
-							<div className={styles.bar__addfile}></div>
+							<label className={styles.bar__addfile}>
+								<input
+									className={styles.bar__input}
+									type='file'
+									accept='image/*,.png,.jpg,.gif,.web'
+									value={value}
+									onChange={uploadFile}
+									multiple
+								/>
+							</label>
+
 							<div className={styles.bar__container__emoji}>
 								<div className={styles.emoji}></div>
-								<div className={styles.pattern}></div>
+								<div
+									onClick={() => {
+										modalStore.changePatterns();
+									}}
+									className={styles.pattern}
+								></div>
+								<Patterns />
 							</div>
 						</div>
 					</div>
@@ -271,68 +386,113 @@ function PostModal({ type, title }: PostProps) {
 						</div>
 					</div>
 				</div>
-				{postStore.socArray.length === 0 ? (
-					<div className={styles.warning}>
-						Подключите страницы в соцсети, чтобы опубликовать пост
-					</div>
-				) : alert === '' ? (
-					<></>
-				) : (
-					<div className={styles.alert}>{alert}</div>
-				)}
-				<div className={styles.buttons}>
-					<button
-						onClick={() => {
-							modalStore.changeModalMore();
-						}}
-						className={styles.button__draftortalk}
-					></button>
-					<MoreModal
-						onClickDraft={addDraftPost}
-						onClickDelete={onClickDelete}
-					/>
-					<div>
-						{dateStore.currentDate === 0 ? (
-							<>
-								<button
-									onClick={() => {
-										dateStore.changeCalendar();
-									}}
-									className={styles.button__plan}
-								>
-									Запланировать
-								</button>
-								<button onClick={type === 'draft' ? addDraftPost : addPlanPost} className={styles.button__create}>
-									Опубликовать
-								</button>
-							</>
-						) : (
-							<div className={styles.dateAndButton}>
-								<button
-									onClick={() => {
-										dateStore.changeCalendar();
-									}}
-									className={styles.button__time}
-								>
-									{`${dayjs(dateStore.currentDate)
+				<div className={styles.buttons__container}>
+					{postStore.activePostIsPublished ? (
+						<div className={styles.published}>
+							<span>
+								Опубликован{' '}
+								<span style={{ fontWeight: '600' }}>
+									{dayjs(dateStore.currentDate)
 										.locale('ru')
-										.format('DD MMM HH:mm')}`}
-								</button>
-								<div
-									onClick={() => {
-										dateStore.changeCurrentDate(0);
-									}}
-									style={{
-										paddingLeft: '15px',
-										marginLeft: '-55px',
-										marginRight: '25px',
-										borderLeft: '1px solid gray',
-									}}
-									className={styles.exit}
-								></div>
-								<button onClick={addPlanPost} className={styles.button__create}>
-									Запланировать
-								</button>
+										.format('D MMMM HH:mm')}
+								</span>
+							</span>
+						</div>
+					) : (
+						<></>
+					)}
+					{postStore.socArray.length === 0 ? (
+						<div className={styles.warning}>
+							Подключите страницы в соцсети, чтобы опубликовать пост
+						</div>
+					) : alert === '' ? (
+						<></>
+					) : (
+						<div className={styles.alert}>{alert}</div>
+					)}
+
+					<div className={styles.buttons}>
+						{postStore.activePostIsPublished ? (
+							<button onClick={onClickDelete} className={styles.button__delete}>
+								<span>Удалить</span>
+							</button>
+						) : (
+							<button
+								onClick={() => {
+									modalStore.changeModalMore();
+								}}
+								className={styles.button__draftortalk}
+							></button>
+						)}
+
+						<MoreModal
+							onClickDraft={addDraftPost}
+							onClickDelete={onClickDelete}
+						/>
+						{postStore.activePostIsPublished ? (
+							<button
+								onClick={() => {
+									postStore.changeUpdatePost();
+									postStore.changeActivePostPublished(false);
+									dateStore.changeCurrentDate(0);
+								}}
+								className={styles.button__copy}
+							>
+								Создать копию
+							</button>
+						) : (
+							<div>
+								{dateStore.currentDate === 0 ? (
+									<>
+										<button
+											onClick={() => {
+												dateStore.changeCalendar();
+												dateStore.resetAll();
+											}}
+											className={styles.button__plan}
+										>
+											Запланировать
+										</button>
+										<button
+											onClick={type === 'draft' ? addDraftPost : addPlanPost}
+											className={styles.button__create}
+										>
+											Опубликовать
+										</button>
+									</>
+								) : (
+									<div className={styles.dateAndButton}>
+										<button
+											onClick={() => {
+												dateStore.changeCalendar();
+												setAlert('');
+											}}
+											className={styles.button__time}
+										>
+											{`${dayjs(dateStore.currentDate)
+												.locale('ru')
+												.format('DD MMM HH:mm')}`}
+										</button>
+										<div
+											onClick={() => {
+												dateStore.changeCurrentDate(0);
+											}}
+											style={{
+												paddingLeft: '15px',
+												marginLeft: '-55px',
+												marginRight: '25px',
+												borderLeft: '1px solid gray',
+											}}
+											className={styles.exit}
+										></div>
+										<button
+											onClick={addPlanPost}
+											className={styles.button__create}
+										>
+											Запланировать
+										</button>
+									</div>
+								)}
 							</div>
 						)}
 					</div>

@@ -1,19 +1,27 @@
+import { observer } from 'mobx-react-lite';
+import { filterStore } from '../../stores/filterStore';
+import { modalStore } from '../../stores/modalStore';
 import styles from './filter.module.scss';
+import Themes from './themes/themes';
 
 const Filter = () => {
 	return (
-		<div className={styles.container}>
+		<div
+			onClick={() => {
+				modalStore.changeModalFilterThemes();
+			}}
+			className={styles.container}
+		>
+			<span>Темы:</span>
 			<div className={styles.filter}>
-				<span className={styles.filter__text}>Фильтры:</span>
-				<select>
-					<option value='GR'>Темы</option>
-					<option value='YE'>Yellow</option>
-					<option value='BL'>Black</option>
-				</select>
+				<div className={styles.select}>
+					<span>{filterStore.activeTheme.theme}</span>
+				</div>
+				<div className={styles.arrow}></div>
+				<Themes />
 			</div>
-			<span className={styles.select}></span>
 		</div>
 	);
 };
 
-export default Filter;
+export default observer(Filter);

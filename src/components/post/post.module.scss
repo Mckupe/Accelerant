@@ -40,17 +40,15 @@
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
 	white-space: nowrap;
-    overflow: hidden;
+	overflow: hidden;
 	text-overflow: clip;
 	margin-left: 4px;
-	
 }
 
 .text {
 	@include font-400;
 	color: #2a2c2a;
-	height: 51px;
-	
+	height: 40px;
 }
 
 .spans {
@@ -60,12 +58,22 @@
 	max-height: 51px;
 	text-overflow: ellipsis;
 	display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical; 
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
 }
 
 .img {
-	height: 35px;
+	display: grid;
+	grid-template-columns: repeat(10, 12px);
+	height: 46px;
+}
+
+.preview {
+	box-sizing: border-box;
+	border: 2px solid white;
+	width: 45px;
+	height: 45px;
+	border-radius: 5px;
 }
 
 .main {

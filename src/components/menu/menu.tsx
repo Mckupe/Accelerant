@@ -23,7 +23,7 @@ const Menu = () => {
 						<div className={styles.menu_text}>Проекты</div>
 					</NavLink>
 					<NavLink
-						to='//'
+						to='/patterns'
 						className={props =>
 							props.isActive
 								? styles.logoandtext__active

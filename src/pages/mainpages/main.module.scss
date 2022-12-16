@@ -1,19 +1,35 @@
+@import '../../variables.scss';
+
 .main__container {
 	display: grid;
 	grid-template-columns: max-content 1fr;
-	height: 100vh;
-	width: 100vw;
 	margin: 0;
 	font-family: 'Inter';
 }
 
 .container {
 	display: grid;
-	grid-template-rows: min-content 1fr;
+	grid-template-rows: max-content 1fr;
+	height: 100vh;
 }
 
 .main {
 	background-color: #f2f2f2;
+	overflow: auto;
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+
+	&::-webkit-scrollbar-track {
+		width: 14px;
+		background: #f2f2f2;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: rgb(164, 164, 164);
+		border: 2px solid #f2f2f2;
+		border-radius: 10px;
+	}
 }
 
 .adder__and__projects {
@@ -22,6 +38,35 @@
 	margin: 40px 57px 0px 57px;
 }
 
+<<<<<<< HEAD
+.day {
+	@include font-500;
+	margin-bottom: 12px;
+}
+
+.message {
+	@include font-400;
+	color: #80888f;
+}
+
+.main__days {
+	display: flex;
+	flex-direction: column;
+}
+
+.main__oneday {
+	display: flex;
+	flex-direction: column;
+
+	min-height: 60px;
+	margin-bottom: 24px;
+}
+
+.day__posts {
+	display: flex;
+	flex-wrap: wrap;
+}
+=======
 .settings {
     display: flex;
     flex-direction: column;
@@ -52,3 +97,4 @@
         transition: .2s;
     }
 }
+>>>>>>> fed67f2ea8c8bd624fe9a6afe03e209919568109

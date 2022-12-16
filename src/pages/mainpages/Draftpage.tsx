@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
 import Header from '../../components/header/header';
-import Filter from '../../components/filter/filter';
 import Adder from '../../components/adder/adder';
 import PostModal from '../../components/modal/post-modal/post-modal';
 import { modalStore } from '../../stores/modalStore';
@@ -42,9 +41,8 @@ function Draftpage() {
 		<div className={styles.main__container}>
 			<Menu />
 			<div className={styles.container}>
-				<Header text={'Черновики'} />
+				<Header text={'Черновики'} type='draft' />
 				<div className={styles.main}>
-					<Filter />
 					<div className={styles.adder__and__projects}>
 						<Adder text={'Новый черновик'} type='draft' />
 						<PostModal title={'Новый черновик'} type={'draft'}/>
@@ -59,6 +57,9 @@ function Draftpage() {
 									arrTheme={post.post.themeId}
 									text={post.text}
 									key={key}
+									arrImgs={post.img}
+									type='draft'
+									published={post.post.published}
 								/>
 							);
 						})}

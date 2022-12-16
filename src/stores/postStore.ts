@@ -1,9 +1,10 @@
+import dayjs from 'dayjs';
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
 class postDataStore {
 	activePostId = 0;
-
+	activePostIsPublished = false;
 	socArray: Array<Socnet> = [];
 	themeArray: Array<Theme> = [];
 
@@ -15,6 +16,7 @@ class postDataStore {
 	postsArray: Array<Posts> = [];
 
 	updatePost = false;
+	morePosts = true;
 
 	resetTextPost() {
 		return '';
@@ -37,6 +39,10 @@ class postDataStore {
 
 	changeActivePostId(id: number) {
 		this.activePostId = id;
+	}
+
+	changeActivePostPublished(published: boolean) {
+		this.activePostIsPublished = published;
 	}
 
 	addSocArray(socArray: Array<Socnet>) {
@@ -81,6 +87,40 @@ class postDataStore {
 
 	changeUpdatePost() {
 		this.updatePost = !this.updatePost;
+	}
+
+	changeMorePosts() {
+		this.morePosts = !this.morePosts;
+	}
+
+	getDayPosts(day: string, theme: Theme) {
+		const dayPosts: Array<Posts> = [];
+		this.postsArray.map(post => {
+			if (
+				dayjs(Number(post.post.time)).locale('ru').format('D MMMM dddd') === day
+			)
+				dayPosts.push(post);
+		});
+		if (theme.theme === 'Все') return this.sortPosts(dayPosts);
+		else {
+			return this.filterPosts(dayPosts, theme);
+		}
+	}
+
+	filterPosts(posts: Array<Posts>, theme: Theme) {
+		return posts.filter(post => {
+			return post.post.themeId.includes(theme.id);
+		});
+	}
+
+	sortPosts(posts: Array<Posts>) {
+		return posts.sort((x, y) => {
+			return x.post.time === y.post.time
+				? 0
+				: x.post.time > y.post.time
+				? 1
+				: -1;
+		});
 	}
 }
 

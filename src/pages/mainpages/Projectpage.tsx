@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
 import Header from '../../components/header/header';
-import Filter from '../../components/filter/filter';
 import Adder from '../../components/adder/adder';
 import ProjectModal from '../../components/modal/project-modal/project-modal';
 import Project from '../../components/project/project';
@@ -19,6 +18,23 @@ import PostModal from '../../components/modal/post-modal/post-modal';
 function Projectpage() {
 	const navigate = useNavigate();
 	const projects = projectStore.sort;
+
+	useEffect(() => {
+		async function telegram() {
+			await axios({
+				method: 'post',
+				url: 'http://localhost:5000/api/telegram/check',
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+			})
+				.then(response => {
+					console.log(response);
+				})
+				.catch(error => {
+					console.log(error.response.data.message);
+				});
+		}
+		telegram();
+	}, []);
 
 	useEffect(() => {
 		async function projects() {
@@ -70,14 +86,13 @@ function Projectpage() {
 		<div className={styles.main__container}>
 			<Menu />
 			<div className={styles.container}>
-				<Header text={'Проекты'} />
+				<Header text={'Проекты'} type='project' />
 				<div className={styles.main}>
-					<Filter />
 					<div className={styles.adder__and__projects}>
 						<Adder text={'Новый проект'} type={'project'} />
 						<PostModal title={'Новый пост'} type={'post'} />
 						<TalkModal />
-						{projects.map((project: ObjectProject, i: number) => {
+						{projects.map((project: ObjectProject, key: number) => {
 							return (
 								<Project
 									onClick={onClickProject}
@@ -87,7 +102,7 @@ function Projectpage() {
 									nameCreator={project.nameCreator}
 									arrSoc={project.arraySoc}
 									favorit={project.favorit}
-									key={i}
+									key={key}
 								/>
 							);
 						})}

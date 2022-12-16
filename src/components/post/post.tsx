@@ -7,44 +7,52 @@ import { tokenStore } from '../../stores/tokenStore';
 import { modalStore } from '../../stores/modalStore';
 import { dateStore } from '../../stores/dateStore';
 import { commentStore } from '../../stores/commentStore';
+import { imgsStore } from '../../stores/imgsStore';
 
 type ProjectProps = {
 	id: number;
 	text: string;
 	date: string;
 	nameCreator: string;
+	arrImgs: Array<string>;
 	arrSoc: Array<number>;
 	arrTheme: Array<number>;
+	type: string;
+	published: boolean;
 };
 
 function Post({
 	id,
 	date,
+	arrImgs,
 	nameCreator,
 	arrSoc,
 	arrTheme,
 	text,
+	type,
+	published,
 }: ProjectProps) {
-
 	async function updatePost(e: any) {
 		const id = e.currentTarget.dataset.id;
 		await axios({
 			method: 'get',
 			url: 'http://localhost:5000/api/post/getOne',
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
-			params: {postid: id}
+			params: { postid: id },
 		})
 			.then(response => {
 				console.log(response.data.posts);
 				const post = response.data.posts;
 				postStore.changeActivePostId(post.post.id);
+				postStore.changeActivePostPublished(post.post.published);
 				postStore.activeSocArray = post.post.socnetId;
 				postStore.activeThemeArray = post.post.themeId;
 				dateStore.changeCurrentDate(Number(post.post.time));
 				postStore.changeTextPost(post.text);
+				imgsStore.activeImgs = post.img;
 			})
 			.catch(error => {
-				console.log(error.response.data.message);
+				console.log(error);
 			});
 		await axios({
 			method: 'get',
@@ -64,18 +72,25 @@ function Post({
 	}
 
 	return (
-		<div onClick={updatePost} data-id={id} className={styles.container}>
+		<div
+			onClick={updatePost}
+			data-id={id}
+			className={styles.container}
+			style={{ opacity: published ? '0.7' : '1' }}
+		>
 			<div className={styles.head}>
 				<div className={styles.head__date}>
-					{moment(date, 'x').format('DD.MM HH:mm')}
+					{type === 'post'
+						? moment(date, 'x').format('HH:mm')
+						: moment(date, 'x').format('DD.MM HH:mm')}
 				</div>
 				<div className={styles.head__themes}>
 					{arrTheme ? (
-						arrTheme.map((theme: number, i: number) => {
+						arrTheme.map((theme: number, key: number) => {
 							const the = postStore.getThemeName(theme);
 							return (
 								<div
-									key={i}
+									key={key}
 									className={styles.theme}
 									style={{
 										backgroundColor: `#${the!.color}`,
@@ -100,11 +115,22 @@ function Post({
 			<div className={styles.text}>
 				<div className={styles.spans}>{text}</div>
 			</div>
-			<div className={styles.img}></div>
+			<div className={styles.img}>
+				{arrImgs.map((img: string, key: number) => {
+					return (
+						<img
+							className={styles.preview}
+							src={`http://localhost:5000/static/imgs/${img}`}
+							alt=''
+							key={key}
+						/>
+					);
+				})}
+			</div>
 			<div className={styles.main}>
 				<div className={styles.main__container}>
 					{arrSoc ? (
-						arrSoc.map((soc: number, i: number) => {
+						arrSoc.map((soc: number, key: number) => {
 							return (
 								<div
 									className={postStore.getSocName(soc)}
@@ -114,7 +140,7 @@ function Post({
 										backgroundSize: '20px',
 										border: 'none',
 									}}
-									key={i}
+									key={key}
 								/>
 							);
 						})
@@ -126,6 +152,6 @@ function Post({
 			</div>
 		</div>
 	);
-};
+}
 
 export default observer(Post);

@@ -3,26 +3,18 @@
 	align-items: center;
 	justify-content: space-between;
 	height: 41px;
-	margin: 16px 57px 0px 57px;
+	width: 175px;
 }
 
-.filter__text {
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 140%;
-	color: #2a2c2a;
-	margin-right: 40px;
-}
-
-select {
-	width: 89px;
+.filter {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 113px;
 	height: 41px;
 	background: #e6e6e6;
 	border-radius: 8px;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background: url('../../static/arr.svg') no-repeat right 12px bottom 15px;
 	padding: 0px 12px 0px 12px;
 	background-color: #e6e6e6;
 	border: none;
@@ -46,8 +38,17 @@ select {
 }
 
 .select {
-	width: 24px;
-	height: 24px;
-	background: url('../../static/select.svg');
-	cursor: pointer;
+	width: 90px;
+	overflow: hidden;
+	white-space:nowrap;
+	display: block;
+	text-overflow: ellipsis;
 }
+
+.arrow {
+	width: 20px;
+	height: 20px;
+	background: url('../../static/arr.svg') no-repeat center;
+}
+
+

@@ -3,9 +3,8 @@
 	flex-direction: column;
 
 	width: 614px;
-	height: 773px;
+	height: 100%;
 
-	margin: 125px 0px 125px 0px;
 
 	background: #ffffff;
 	box-shadow: 0px 0px 12px rgba(92, 102, 107, 0.4);
@@ -218,9 +217,7 @@
 	width: 48px;
 	height: 48px;
 	margin-right: 25px;
-	background: url('../../static/vk.svg') no-repeat right 12px bottom 15px;
-	background-color: #2787f5;
-	background-size: 26px;
+	background: url('../../static/vk.svg') no-repeat center;
 	border-radius: 50%;
 }
 
@@ -228,9 +225,7 @@
 	display: flex;
 	width: 48px;
 	height: 48px;
-	background: url('../../static/tg.svg') no-repeat right 12px bottom 12px;
-	background-color: #36acf2;
-	background-size: 26px;
+	background: url('../../static/tg.svg') no-repeat center;
 	border-radius: 50%;
 }
 

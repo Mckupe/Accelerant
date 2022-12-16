@@ -2,11 +2,19 @@ import { makeAutoObservable } from 'mobx';
 import { postStore } from './postStore';
 
 class commentDataStore {
-	commentArray: Array<Coment> = [];
+	commentArray: Array<Coment> = this.resetCommentArray();
 	dbCommentArray: Array<Coment> = [];
 
 	constructor() {
 		makeAutoObservable(this);
+	}
+
+	resetCommentArray() {
+		return [];
+	}
+
+	changeCommentArray(comments: Array<Coment>) {
+		this.commentArray = comments;
 	}
 
 	addComment(comment: Coment) {

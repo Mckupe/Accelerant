@@ -51,9 +51,11 @@ class dateDataStore {
 
 	changeCurrentDate(date: number) {
 		this.currentDate = date;
+		this.dateL = moment(date).format('LLLL');
 	}
 
 	resetAll() {
+		this.timeM = this.resetTimeM();
 		this.dateM = this.resetDateM();
 		this.dateL = this.resetDateL();
 		this.currentDate = this.resetCurrentDate();

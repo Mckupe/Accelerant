@@ -1,0 +1,31 @@
+@import '../../../variables.scss';
+
+.container {
+	@include font-500;
+	position: absolute;
+	top: 60px;
+	right: 57px;
+	max-width: 113px;
+	background: #ffffff;
+	box-shadow: 0px 0px 8px rgba(92, 102, 107, 0.25);
+	border-radius: 8px;
+	z-index: 100;
+
+	&::-webkit-scrollbar {
+		width: 0px;
+	}
+}
+
+.theme {
+	box-sizing: border-box;
+	height: 34px;
+	max-width: 113px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: 6px 0px 6px 8px;
+	cursor: pointer;
+	&:hover {
+		background-color: rgb(233, 233, 233);
+	}
+}
+

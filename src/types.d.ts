@@ -6,16 +6,25 @@ declare type ObjectProject = {
 	favorit: boolean;
 };
 
+declare type ObjectPattern = {
+	id: number;
+	name: string;
+	nameText: string;
+	text: string;
+	userid: number;
+}
+
 declare type Post = {
 	id: number;
 	time: string;
 	themeId: Array<number>;
 	socnetId: Array<number>;
 	nameCreator: string;
+	published: boolean;
 };
 
 declare type Posts = {
-	img: string;
+	img: Array<string>;
 	post: Post;
 	text: string;
 };

@@ -9,7 +9,13 @@ type AdderProps = {
 const Adder = ({ text, type }: AdderProps) => {
 	return (
 		<div
-			onClick={() => type == 'project' ? modalStore.changeModalProject() : modalStore.changeModalPost()}
+			onClick={() =>
+				type == 'project'
+					? modalStore.changeModalProject()
+					: type === 'pattern'
+					? modalStore.changeModalPattern()
+					: modalStore.changeModalPost()
+			}
 			className={styles.container}
 		>
 			<div className={styles.plus} />

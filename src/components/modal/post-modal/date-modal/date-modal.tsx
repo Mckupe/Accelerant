@@ -15,7 +15,6 @@ const DateModal = () => {
 
 	const onChangeDate = (date: Date) => {
 		dateStore.changeDateM(moment(date).startOf('day').valueOf());
-		dateStore.changeCurrentDate(dateStore.dateM + dateStore.timeM);
 		moment.locale('ru');
 		dateStore.changeDateL(moment(date).format('LLLL'));
 		setAlert('');
@@ -24,13 +23,14 @@ const DateModal = () => {
 	function onChangeTime(value: dayjs.Dayjs | null) {
 		let time = value?.format('HH:mm');
 		const timeArr = time?.split(':');
-		dateStore.timeM =
-			(Number(timeArr![0]) * 60 + Number(timeArr![1])) * 60 * 1000;
-		dateStore.changeCurrentDate(dateStore.dateM + dateStore.timeM);
+		dateStore.changeTimeM(
+			(Number(timeArr![0]) * 60 + Number(timeArr![1])) * 60 * 1000
+		);
 		setAlert('');
 	}
 
 	function onSaveClick() {
+		dateStore.changeCurrentDate(dateStore.dateM + dateStore.timeM);
 		if (dateStore.currentDate < Date.now()) {
 			setAlert('Дата публикации в прошлом!');
 		} else {
@@ -59,7 +59,11 @@ const DateModal = () => {
 				<div className={styles.container}>
 					<Calendar
 						onChange={onChangeDate}
-						value={new Date()}
+						value={
+							dateStore.currentDate === 0
+								? new Date()
+								: new Date(dateStore.currentDate)
+						}
 						locale='ru'
 						navigationLabel={({ label }) => (label = label.split(' ')[0])}
 						minDate={new Date()}
@@ -75,7 +79,11 @@ const DateModal = () => {
 						<span>{dateStore.dateL.split(' ').slice(1, 4).join(' ')}</span>
 						<TimePicker
 							className={'time'}
-							defaultValue={dayjs(dateStore.dateM + dateStore.timeM)}
+							defaultValue={
+								dateStore.currentDate === 0
+									? dayjs(dateStore.dateM + dateStore.timeM)
+									: dayjs(dateStore.currentDate)
+							}
 							format={'HH:mm'}
 							onChange={onChangeTime}
 						/>
