@@ -6,9 +6,10 @@ import styles from './more-modal.module.scss';
 type MoreProps = {
 	onClickDraft: React.MouseEventHandler<HTMLDivElement>;
 	onClickDelete: React.MouseEventHandler<HTMLDivElement>;
+	onClickTalk: React.MouseEventHandler<HTMLDivElement>;
 };
 
-function MoreModal({ onClickDraft, onClickDelete }: MoreProps) {
+function MoreModal({ onClickDraft, onClickDelete, onClickTalk }: MoreProps) {
 	if (!modalStore.modalMore) return null;
 
 	return (
@@ -19,7 +20,7 @@ function MoreModal({ onClickDraft, onClickDelete }: MoreProps) {
 			<div onClick={onClickDraft} className={styles.more__text}>
 				<div className={styles.draft}></div>Черновик
 			</div>
-			<div className={styles.more__text}>
+			<div onClick={onClickTalk} className={styles.more__text}>
 				<div className={styles.comment}></div>
 				Обсуждение
 			</div>

@@ -5,6 +5,7 @@ class modalDataStore {
 	modalProject = false;
 	modalPost = false;
 	modalTalk = false;
+	modalPreview = false;
 	modalTheme = false;
 	modalFilterThemes = false;
 	modalTg = false;
@@ -61,6 +62,10 @@ class modalDataStore {
 
 	changeModalTalk() {
 		this.modalTalk = !this.modalTalk;
+	}
+
+	changeModalPreview() {
+		this.modalPreview = !this.modalPreview;
 	}
 
 	changeModalTheme() {

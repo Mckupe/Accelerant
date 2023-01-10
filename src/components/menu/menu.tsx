@@ -88,10 +88,17 @@ const Menu = () => {
 						<span className={styles.anal}></span>
 						<div className={styles.menu_text}>Аналитика</div>
 					</NavLink>
-					<div className={styles.logoandtext__block}>
+					<NavLink
+						to={'/talks'}
+						className={props =>
+							props.isActive
+								? styles.logoandtext__active
+								: styles.logoandtext__block
+						}
+					>
 						<span className={styles.talk}></span>
 						<div className={styles.menu_text}>Обсуждения</div>
-					</div>
+					</NavLink>
 					<NavLink
 						to='/settings'
 						className={props =>

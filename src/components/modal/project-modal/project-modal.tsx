@@ -33,6 +33,7 @@ function ProjectModal() {
 				});
 			modalStore.changeModalProject();
 			modalStore.changeAddProject();
+			setValue('');
 		}
 	}
 
@@ -45,7 +46,10 @@ function ProjectModal() {
 	return (
 		<>
 			<div
-				onClick={() => modalStore.changeModalProject()}
+				onClick={() => {
+					modalStore.changeModalProject();
+					setValue('');
+				}}
 				className={styles.black}
 			></div>
 			<form className={styles.container}>
