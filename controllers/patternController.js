@@ -11,6 +11,8 @@ class patternController {
 		}
 		const user = await User.findOne({ where: { id: userid } });
 		if (!user) return next(apiError.internal('Пользователь не найден!'));
+		if (await Pattern.findOne({ where: { name: name, userId: user.id } }))
+			return next(apiError.internal('Шаблон с таким названием существует.'));
 		const namePattern = name + '_' + Date.now().toString();
 		fs.writeFileSync(
 			path.resolve(
@@ -38,13 +40,13 @@ class patternController {
 			path.resolve(__dirname, '../static', 'patterns', `${nameText}` + '.txt'),
 			text
 		);
-		await Pattern.update(
+		const pat = await Pattern.update(
 			{
 				name: name,
 			},
 			{ where: { id: patternid } }
 		);
-		return res.json('Шаблон обновлен.');
+		return res.json(pat);
 	}
 
 	async getPatterns(req, res, next) {
@@ -83,14 +85,19 @@ class patternController {
 		if (!patternid) {
 			return next(apiError.badRequest('Отсутствует name или patternid!'));
 		}
-		const pattern = await Pattern.findOne({where: {id: patternid}});
+		const pattern = await Pattern.findOne({ where: { id: patternid } });
 		fs.unlinkSync(
-			path.resolve(__dirname, '../static', 'patterns', `${pattern.text}` + '.txt'),
+			path.resolve(
+				__dirname,
+				'../static',
+				'patterns',
+				`${pattern.text}` + '.txt'
+			),
 			() => {
 				console.log('Файл удален!');
 			}
 		);
-		await Pattern.destroy({where: {id: patternid}});
+		await Pattern.destroy({ where: { id: patternid } });
 		return res.json('Шаблон удален.');
 	}
 }

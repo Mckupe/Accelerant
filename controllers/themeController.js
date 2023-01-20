@@ -19,7 +19,7 @@ class themeController {
         }
         const rule = await ruleController.getRules(userid, projectid);
         if (rule.createAndUpdatePlan) {
-            if (await Theme.findOne({where: {theme: text}})) { 
+            if (await Theme.findOne({where: {theme: text, projectId: projectid}})) { 
                 return next(apiError.badRequest('Тема с таким названием уже существует!'));
             }
             else { 

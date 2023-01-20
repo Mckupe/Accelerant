@@ -1,5 +1,4 @@
-const {Rules, ProjectUsers} = require('../models/models');
-
+const {Project, Rules, ProjectUsers} = require('../models/models');
 class ruleController {
 
     /**
