@@ -17,6 +17,7 @@ import { dayStore } from '../../stores/daysStore';
 import { patternStore } from '../../stores/patternStore';
 import PatternModal from '../../components/modal/pattern-modal/pattern-modal';
 import { filterStore } from '../../stores/filterStore';
+import PreviewModal from '../../components/modal/post-modal/preview-modal/preview-modal';
 
 function Postpage() {
 	useEffect(() => {
@@ -120,6 +121,7 @@ function Postpage() {
 						{/* <Adder text={'Новый пост'} type='post' /> */}
 						<PostModal title={'Новый пост'} type={'post'} />
 						<TalkModal />
+						<PreviewModal/>
 						<div className={styles.main__days}>
 							{getDaysInMonth(
 								dayStore.dateForPosts.month,

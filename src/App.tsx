@@ -6,6 +6,7 @@ import Draftpage from './pages/mainpages/Draftpage';
 import Patternpage from './pages/mainpages/Patternpage';
 import Settings from './pages/mainpages/Settings';
 import Analitics from './pages/mainpages/Analitics';
+import Talkpage from './pages/mainpages/Talkpage';
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 				<Route path='/patterns' element={<Patternpage />} />
 				<Route path='/settings' element={<Settings />} />
 				<Route path='/analitics' element={<Analitics />} />
+				<Route path='/talks' element={<Talkpage />} />
 			</Routes>
 		</>
 	);

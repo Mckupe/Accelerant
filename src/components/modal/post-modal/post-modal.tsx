@@ -18,6 +18,7 @@ import MoreModal from './more-modal/more-modal';
 import { imgsStore } from '../../../stores/imgsStore';
 import Patterns from './patterns/patterns';
 import { commentStore } from '../../../stores/commentStore';
+import { previewStore } from '../../../stores/previewStore';
 
 type PostProps = {
 	type: string;
@@ -57,18 +58,25 @@ function PostModal({ type, title }: PostProps) {
 			modalStore.changeModalTalk();
 			commentStore.changeCommentArray(commentStore.resetCommentArray());
 		}
+		if (modalStore.modalPreview) modalStore.changeModalPreview();
 		if (dateStore.currentDate > 0) dateStore.changeCurrentDate(0);
 		if (modalStore.patterns) modalStore.changePatterns();
+		if (postStore.activePostIsPublished)
+			postStore.changeActivePostPublished(false);
 		imgsStore.resetActiveImgs();
+		previewStore.changeModalTg(false);
+		previewStore.changeModalVk(false);
 	}
 
 	async function addPlanPost() {
 		let time;
 		if (dateStore.currentDate === 0) time = dateStore.dateM + dateStore.timeM;
-		else time = dateStore.currentDate;
-		if (time < Date.now()) {
-			setAlert('Время публикации в прошлом.');
-			return;
+		else {
+			time = dateStore.currentDate;
+			if (time < Date.now()) {
+				setAlert('Время публикации в прошлом.');
+				return;
+			}
 		}
 		if (postStore.activeSocArray.length === 0)
 			setAlert('Пожалуйста, выберите аккаунты для публикации.');
@@ -78,7 +86,7 @@ function PostModal({ type, title }: PostProps) {
 			if (postStore.textPost.length === 0)
 				setAlert('Вы не можете разместить публикацию без текста.');
 			else {
-				const data = {
+				let data = {
 					text: postStore.textPost,
 					time: time,
 					img: imgsStore.activeImgs,
@@ -90,13 +98,22 @@ function PostModal({ type, title }: PostProps) {
 					projectid: oneProjectStore.activeProject.id,
 					nameCreator: userStore.userdata.name,
 				};
+				type === 'talk'
+					? (data = { ...data, talk: true, plan: false })
+					: (data = { ...data, talk: false, plan: true });
 				await axios({
 					method: `${postStore.updatePost ? 'put' : 'post'}`,
-					url: `http://localhost:5000/api/post/${postStore.updatePost ? 'update' : 'add'
-						}`,
+					url: `http://localhost:5000/api/post/${
+						postStore.updatePost ? 'update' : 'add'
+					}`,
 					headers: { Authorization: 'Bearer ' + tokenStore.token },
 					data: postStore.updatePost
-						? { ...data, postid: postStore.activePostId }
+						? {
+								...data,
+								postid: postStore.activePostId,
+								talk: false,
+								plan: true,
+						  }
 						: data,
 				})
 					.then(async response => {
@@ -156,8 +173,9 @@ function PostModal({ type, title }: PostProps) {
 		};
 		await axios({
 			method: `${postStore.updatePost ? 'put' : 'post'}`,
-			url: `http://localhost:5000/api/post/${postStore.updatePost ? 'update' : 'add'
-				}`,
+			url: `http://localhost:5000/api/post/${
+				postStore.updatePost ? 'update' : 'add'
+			}`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: postStore.updatePost
 				? { ...data, postid: postStore.activePostId }
@@ -179,6 +197,35 @@ function PostModal({ type, title }: PostProps) {
 			url: `http://localhost:5000/api/post/delete`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: { postid: postStore.activePostId },
+		})
+			.then(response => {
+				console.log(response.data);
+			})
+			.catch(error => {
+				console.log(error.response.data.message);
+			});
+		resetAll();
+		modalStore.changeAddPost();
+	}
+
+	async function onClickTalk() {
+		await axios({
+			method: `put`,
+			url: `http://localhost:5000/api/post/update`,
+			headers: { Authorization: 'Bearer ' + tokenStore.token },
+			data: {
+				text: postStore.textPost,
+				time: dateStore.dateM + dateStore.timeM,
+				img: imgsStore.activeImgs,
+				draft: false,
+				talk: true,
+				plan: false,
+				socnetid: postStore.activeSocArray,
+				themeid: postStore.activeThemeArray,
+				projectid: oneProjectStore.activeProject.id,
+				nameCreator: userStore.userdata.name,
+				postid: postStore.activePostId,
+			},
 		})
 			.then(response => {
 				console.log(response.data);
@@ -250,14 +297,21 @@ function PostModal({ type, title }: PostProps) {
 				<div>
 					<div className={styles.head}>
 						<span>
-							{type === 'post' && postStore.updatePost
+							{(type === 'post' || type === 'talk') && postStore.updatePost
 								? 'Публикация'
 								: type === 'draft' && postStore.updatePost
-									? 'Черновик'
-									: title}
+								? 'Черновик'
+								: title}
 						</span>
 						<div className={styles.head__icons}>
-							<div className={styles.eye}></div>
+							<div
+								onClick={() => {
+									modalStore.changeModalPreview();
+									previewStore.changeModalTg(false);
+									previewStore.changeModalVk(false);
+								}}
+								className={styles.eye}
+							></div>
 							<div
 								onClick={() => {
 									if (modalStore.modalTalk)
@@ -364,31 +418,31 @@ function PostModal({ type, title }: PostProps) {
 						<div className={styles.themes__container}>
 							{postStore.themeArray.length > 0
 								? postStore.themeArray.map((theme: any, key: number) => {
-									return (
-										<div key={key} style={{ display: 'flex' }}>
-											<input
-												id={theme.id}
-												type='checkbox'
-												className={styles.theme__input}
-												checked={
-													postStore.activeThemeArray.includes(theme.id)
-														? false
-														: true
-												}
-												onChange={() => { }}
-											/>
-											<label
-												data-id={theme.id}
-												onClick={changeThemeArray}
-												htmlFor={theme.id}
-												className={styles.theme}
-												style={{ backgroundColor: `#${theme.color}` }}
-											>
-												{theme.theme}
-											</label>
-										</div>
-									);
-								})
+										return (
+											<div key={key} style={{ display: 'flex' }}>
+												<input
+													id={theme.id}
+													type='checkbox'
+													className={styles.theme__input}
+													checked={
+														postStore.activeThemeArray.includes(theme.id)
+															? false
+															: true
+													}
+													onChange={() => {}}
+												/>
+												<label
+													data-id={theme.id}
+													onClick={changeThemeArray}
+													htmlFor={theme.id}
+													className={styles.theme}
+													style={{ backgroundColor: `#${theme.color}` }}
+												>
+													{theme.theme}
+												</label>
+											</div>
+										);
+								  })
 								: null}
 							<div
 								onClick={() => {
@@ -425,11 +479,18 @@ function PostModal({ type, title }: PostProps) {
 						<div className={styles.alert}>{alert}</div>
 					)}
 
-					<div className={styles.buttons}>
+					<div
+						className={styles.buttons}
+						style={{
+							justifyContent: type === 'talk' ? 'flex-end' : 'space-between',
+						}}
+					>
 						{postStore.activePostIsPublished ? (
 							<button onClick={onClickDelete} className={styles.button__delete}>
 								<span>Удалить</span>
 							</button>
+						) : type === 'talk' ? (
+							<></>
 						) : (
 							<button
 								onClick={() => {
@@ -442,6 +503,7 @@ function PostModal({ type, title }: PostProps) {
 						<MoreModal
 							onClickDraft={addDraftPost}
 							onClickDelete={onClickDelete}
+							onClickTalk={onClickTalk}
 						/>
 						{postStore.activePostIsPublished ? (
 							<button
@@ -471,7 +533,11 @@ function PostModal({ type, title }: PostProps) {
 											onClick={type === 'draft' ? addDraftPost : addPlanPost}
 											className={styles.button__create}
 										>
-											Опубликовать
+											{type === 'talk' && postStore.updatePost
+												? 'Утвердить'
+												: type === 'talk'
+												? 'На утверждение'
+												: 'Запланировать'}
 										</button>
 									</>
 								) : (
@@ -494,7 +560,7 @@ function PostModal({ type, title }: PostProps) {
 											style={{
 												paddingLeft: '15px',
 												marginLeft: '-55px',
-												marginRight: '25px',
+												marginRight: '15px',
 												borderLeft: '1px solid gray',
 											}}
 											className={styles.exit}
@@ -503,7 +569,11 @@ function PostModal({ type, title }: PostProps) {
 											onClick={addPlanPost}
 											className={styles.button__create}
 										>
-											Запланировать
+											{type === 'talk' && postStore.updatePost
+												? 'Утвердить'
+												: type === 'talk'
+												? 'На утверждение'
+												: 'Запланировать'}
 										</button>
 									</div>
 								)}
