@@ -67,6 +67,7 @@ const Post = sequelize.define('post', {
 	socnetId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id соцсетей
 	themeId: { type: DataTypes.ARRAY(DataTypes.INTEGER), allowNull: false }, // массив id тем
 	nameCreator: { type: DataTypes.STRING, allowNull: false }, // имя создателя
+    vkid: { type: DataTypes.STRING }, // имя создателя
 });
 
 const Img = sequelize.define('img', {
