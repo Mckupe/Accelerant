@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
 class oneProjectDataStore {
-	activeProject = { id: 0, name: '' };
+	activeProject = { id: 0, name: '',nameCreator: ''};
 	projectData: ObjectProject = this.resetProjectData();
 
 	resetProjectData() {
@@ -28,9 +28,10 @@ class oneProjectDataStore {
 		makeAutoObservable(this);
 	}
 
-	changeActiveProject(id: number, name: string) {
+	changeActiveProject(id: number, name: string, nameCreator: string) {
 		this.activeProject.id = id;
 		this.activeProject.name = name;
+		this.activeProject.nameCreator = nameCreator;
 	}
 
 	changeProjectData(project: ObjectProject) {

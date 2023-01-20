@@ -1,17 +1,47 @@
 import styles from './changename.module.scss';
+import { tokenStore } from '../../../stores/tokenStore';
+import { oneProjectStore } from '../../../stores/oneProjectStore';
 import { useState } from 'react';
+import axios from 'axios';
 
 const Changename = () => {
     const [valid, setValid] = useState(true);
-    const [value, setValue] = useState('');
+	const [value, setValue] = useState('');
 
-    async function buttonClick(e: any) {
+	async function buttonClick(e: any) {
+		e.preventDefault();
+		const re = /^.{1,}$/;
+		if (!re.test(value)) {
+			setValid(false);
+		} else {
+			setValid(true);
+			console.log(value);
+			await axios({
+				method: 'put',
+				url: 'http://localhost:5000/api/project/update',
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+				data: {
+                    projectid: oneProjectStore.activeProject.id,
+					name: value,
+				},
+			})
+				.then(response => {
+					return console.log(response.data);
+				})
+				.catch(error => {
+					return console.log(error.response.data.message);
+				});
+		}
+		oneProjectStore.changeActiveProject(
+			oneProjectStore.activeProject.id,
+			value,
+			oneProjectStore.activeProject.nameCreator
+		);
+	}
 
-    }
-
-    function changeValue(e: any) {
-        setValue(e.target.value);
-    }
+	function changeValue(e: any) {
+		setValue(e.target.value);
+	}
 
     return (
         <div className={styles.container}>

@@ -25,6 +25,7 @@ const Project = ({
 			onClick={onClick}
 			data-name={name}
 			data-id={id}
+			data-nameCreator={nameCreator}
 			className={styles.container}
 		>
 			<div className={styles.head}>

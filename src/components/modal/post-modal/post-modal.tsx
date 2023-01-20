@@ -100,7 +100,7 @@ function PostModal({ type, title }: PostProps) {
 						: data,
 				})
 					.then(async response => {
-						if (!postStore.updatePost && dateStore.currentDate === 0) {
+						if (!postStore.updatePost && dateStore.currentDate === 0 && response.data.post.socnetId.includes(1)) {
 							await axios({
 								method: 'post',
 								url: 'http://localhost:5000/api/telegram/publish',
@@ -114,6 +114,20 @@ function PostModal({ type, title }: PostProps) {
 									console.log(error.response.data.message);
 								});
 						}
+						if (!postStore.updatePost && response.data.post.socnetId.includes(1)) {
+							await axios({
+								method: 'post',
+								url: 'http://localhost:5000/api/vk/post',
+								headers: { Authorization: 'Bearer ' + tokenStore.token },
+								data: { postid: response.data.post.id },
+							})
+								.then(response => {
+									console.log(response.data);
+								})
+								.catch(error => {
+									console.log(error.response.data.message);
+								});
+						}console.log(response.data);
 					})
 					.catch(error => {
 						console.log(error.response.data.message);

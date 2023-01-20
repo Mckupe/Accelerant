@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .filters{
     margin: 0px 0px 0px 40px;
     display: flex;
@@ -50,4 +52,75 @@
         background-color: #D4D4D4;
         transition: .2s;
     }
+}
+
+.theme__input {
+	margin: 0;
+	appearance: none;
+	background-clip: content-box;
+	background-position: center;
+	padding: 0;
+	border-radius: 6px;
+
+	&:checked + label {
+		background-color: rgb(229, 229, 229) !important;
+		color: #2a2c2a;
+		opacity: 0.6;
+	}
+
+	&:hover + label {
+		opacity: 1;
+	}
+}
+
+.themes {
+	@include font-500;
+	display: flex;
+	height: 22px;
+	margin-bottom: 24px;
+}
+
+.theme {
+	@include font-400;
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	align-items: center;
+	border-radius: 6px;
+	height: 22px;
+	padding: 2px 4px 2px 4px;
+	margin-right: 14px;
+	margin-bottom: 8px;
+	color: white;
+	cursor: pointer;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none;
+}
+
+.themes__container {
+	display: flex;
+	flex-wrap: wrap;
+	height: 60px;
+	overflow: auto;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: rgb(214, 214, 214);
+		border-radius: 5px;
+	}
+}
+
+.plus__theme {
+	width: 10px;
+	height: 10px;
+	background: url('../../static/plus-post.svg') no-repeat center;
+	cursor: pointer;
+	margin-top: 5px;
 }

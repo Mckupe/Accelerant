@@ -12,20 +12,20 @@ import {
   } from "recharts";
 import { useState } from 'react';
 
-const UserData = [
-    {
-        "date": 215,
-        "value": 10
-    },
-    {
-        "date": 235,
-        "value": 20
-    },
-    {
-        "date": 124,
-        "value": 30
-    }
-]
+// const UserData = [
+//     {
+//         "date": 215,
+//         "value": 10
+//     },
+//     {
+//         "date": 235,
+//         "value": 20
+//     },
+//     {
+//         "date": 124,
+//         "value": 30
+//     }
+// ]
 
 
 
@@ -35,21 +35,25 @@ const Changename = () => {
     const [value, setValue] = useState('');
 
     const data = [
-        { name: "Facebook", users: 2000000000 },
-        { name: "Instagram", users: 1500000000 },
-        { name: "Twiter", users: 1000000000 },
-        { name: "Telegram", users: 500000000 },
+        { name: "10", просмотры: 2000000000 },
+        { name: "11", просмотры: 1500000000 },
+        { name: "12", просмотры: 1000000000 },
+        { name: "13", просмотры: 500000000 },
+        { name: "14", просмотры: 2000000000 },
+        { name: "15", просмотры: 1500000000 },
+        { name: "16", просмотры: 1000000000 },
+        { name: "17", просмотры: 500000000 },
       ];
       
-    const [userData, setUserData] = useState({
-        labels: UserData.map((data) => data.date),
-        datasets: [
-            {
-                label: "Pops",
-                data: UserData.map((data) => data.value),
-            },
-        ],
-    });
+    // const [userData, setUserData] = useState({
+    //     labels: UserData.map((data) => data.date),
+    //     datasets: [
+    //         {
+    //             label: "Pops",
+    //             data: UserData.map((data) => data.value),
+    //         },
+    //     ],
+    // });
 
     async function buttonClick(e: any) {
 
@@ -61,7 +65,7 @@ const Changename = () => {
 
     return (
         <div style={{ textAlign: "center" }}>
-      <h1>Socail Media Users</h1>
+      <h1>Просмотры по датам</h1>
       <div className="App">
         <BarChart
           width={500}
@@ -84,7 +88,7 @@ const Changename = () => {
           <Tooltip />
           <Legend />
           <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="users" fill="#8884d8" background={{ fill: "#eee" }} />
+          <Bar dataKey="просмотры" fill="#8884d8" background={{ fill: "#eee" }} />
         </BarChart>
       </div>
     </div>

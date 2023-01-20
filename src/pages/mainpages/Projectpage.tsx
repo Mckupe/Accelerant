@@ -60,7 +60,8 @@ function Projectpage() {
 	function onClickProject(e: any) {
 		oneProjectStore.changeActiveProject(
 			e.currentTarget.dataset.id,
-			e.currentTarget.dataset.name
+			e.currentTarget.dataset.name,
+			e.currentTarget.dataset.nameCreator
 		);
 		navigate('/posts');
 	}
