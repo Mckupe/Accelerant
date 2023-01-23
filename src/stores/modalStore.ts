@@ -10,6 +10,7 @@ class modalDataStore {
 	modalFilterThemes = false;
 	modalTg = false;
 	modalVk = false;
+	modalSoc = false;
 	modalMore = false;
 	patterns = false;
 	addProject = false;
@@ -74,6 +75,10 @@ class modalDataStore {
 
 	changeModalTg() {
 		this.modalTg = !this.modalTg;
+	}
+
+	changeModalSoc() {
+		this.modalSoc = !this.modalSoc;
 	}
 
 	changeModalVk() {

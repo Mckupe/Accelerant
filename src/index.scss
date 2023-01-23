@@ -1,0 +1,14 @@
+body,
+#root {
+	margin: 0;
+	height: 100vh;
+	font-family: 'Inter';
+	
+	&::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: rgb(214, 214, 214);
+	}
+}

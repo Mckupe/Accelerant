@@ -35,15 +35,15 @@ const Changename = () => {
     const [value, setValue] = useState('');
 
     const data = [
-        { name: "10", просмотры: 20000000 },
-        { name: "11", просмотры: 1500000000 },
-        { name: "12", просмотры: 100000000 },
-        { name: "13", просмотры: 50000000 },
-        { name: "14", просмотры: 2000000000 },
-        { name: "15", просмотры: 150000000 },
-        { name: "16", просмотры: 100000000 },
-        { name: "17", просмотры: 5000000 },
-      ];
+			{ name: '10', комментарии: 200 },
+			{ name: '11', комментарии: 1500 },
+			{ name: '12', комментарии: 1000 },
+			{ name: '13', комментарии: 500 },
+			{ name: '14', комментарии: 2000 },
+			{ name: '15', комментарии: 150 },
+			{ name: '16', комментарии: 1000 },
+			{ name: '17', комментарии: 50 },
+		];
       
     // const [userData, setUserData] = useState({
     //     labels: UserData.map((data) => data.date),
@@ -64,35 +64,36 @@ const Changename = () => {
     }
 
     return (
-        <div style={{ textAlign: "center" }}>
-      <h1>Коментарии по датам</h1>
-      <div className="App">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 80,
-            bottom: 5,
-          }}
-          barSize={20}
-        >
-          <XAxis
-            dataKey="name"
-            scale="point"
-            padding={{ left: 10, right: 10 }}
-          />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="просмотры" fill="#8884d8" background={{ fill: "#eee" }} />
-        </BarChart>
-      </div>
-    </div>
-  );
+			<div className={styles.container}>
+				<h1 className={styles.head}>Комментарии</h1>
+				<div className={styles.container__likes}>
+					<BarChart
+						width={1000}
+						height={300}
+						data={data}
+						margin={{
+							right: 30,
+							left: 40,
+						}}
+						barSize={65}
+					>
+						<XAxis
+							dataKey='name'
+							scale='point'
+							padding={{ left: 30, right: 10 }}
+						/>
+						<YAxis />
+						<Tooltip />
+						<CartesianGrid strokeDasharray='3 3' />
+						<Bar
+							dataKey='комментарии'
+							fill='#8884d8'
+							background={{ fill: '#eee' }}
+						/>
+					</BarChart>
+				</div>
+			</div>
+		);
 }
 
 export default Changename;

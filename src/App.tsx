@@ -7,11 +7,13 @@ import Patternpage from './pages/mainpages/Patternpage';
 import Settings from './pages/mainpages/Settings';
 import Analitics from './pages/mainpages/Analitics';
 import Talkpage from './pages/mainpages/Talkpage';
+import Homepage from './pages/homepage/Homepage';
 
 function App() {
 	return (
 		<>
 			<Routes>
+				<Route path='/' element={<Homepage />} />
 				<Route path='/auth' element={<Authpage />} />
 				<Route path='/project' element={<Projectpage />} />
 				<Route path='/posts' element={<Postpage />} />

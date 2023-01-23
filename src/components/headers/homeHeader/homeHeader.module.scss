@@ -1,0 +1,34 @@
+@import '../../../variables.scss';
+
+.container {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 80px;
+	background: inherit;
+	padding: 0px 120px 0px 120px;
+	z-index: 5;
+}
+
+.logo {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 24px;
+
+	color: #2a2c2a;
+}
+
+.navbar {
+	@include font-500;
+	display: flex;
+	justify-content: space-between;
+	width: 384px;
+}
+
+.auth {
+	text-decoration: none !important;
+	color: #38A8FF;
+}

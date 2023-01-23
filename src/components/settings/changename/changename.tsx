@@ -3,10 +3,11 @@ import { tokenStore } from '../../../stores/tokenStore';
 import { oneProjectStore } from '../../../stores/oneProjectStore';
 import { useState } from 'react';
 import axios from 'axios';
+import { observer } from 'mobx-react-lite';
 
 const Changename = () => {
     const [valid, setValid] = useState(true);
-	const [value, setValue] = useState('');
+	const [value, setValue] = useState(oneProjectStore.activeProject.name);
 
 	async function buttonClick(e: any) {
 		e.preventDefault();
@@ -58,4 +59,4 @@ const Changename = () => {
     )
 }
 
-export default Changename;
+export default observer(Changename);

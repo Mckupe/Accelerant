@@ -4,7 +4,7 @@ import { tokenStore } from '../../stores/tokenStore';
 import { observer } from 'mobx-react-lite';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
-import Header from '../../components/header/header';
+import Header from '../../components/headers/header/header';
 import Adder from '../../components/adder/adder';
 import PostModal from '../../components/modal/post-modal/post-modal';
 import { modalStore } from '../../stores/modalStore';

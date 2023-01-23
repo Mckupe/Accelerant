@@ -86,14 +86,14 @@
     font-weight: 600;
     font-size: 16px;
     line-height: 140%;
-    color: black;
+    color: rgb(252, 91, 91);
     font-family: 'Inter';
     cursor: pointer;
-    background-color: #E6E6E6;
+    background-color: rgb(253, 226, 226);
     border: none;
 
     &:hover {
-        background-color: #D4D4D4;
+        background-color: rgb(255, 216, 216);
         transition: .2s;
     }
 }

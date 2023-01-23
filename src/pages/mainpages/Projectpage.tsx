@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
-import Header from '../../components/header/header';
+import Header from '../../components/headers/header/header';
 import Adder from '../../components/adder/adder';
 import ProjectModal from '../../components/modal/project-modal/project-modal';
 import Project from '../../components/project/project';

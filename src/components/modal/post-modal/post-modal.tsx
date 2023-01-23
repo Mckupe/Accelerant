@@ -19,6 +19,8 @@ import { imgsStore } from '../../../stores/imgsStore';
 import Patterns from './patterns/patterns';
 import { commentStore } from '../../../stores/commentStore';
 import { previewStore } from '../../../stores/previewStore';
+import SocModal from './soc-modal/soc-modal';
+import { toJS } from 'mobx';
 
 type PostProps = {
 	type: string;
@@ -117,7 +119,11 @@ function PostModal({ type, title }: PostProps) {
 						: data,
 				})
 					.then(async response => {
-						if (!postStore.updatePost && dateStore.currentDate === 0 && response.data.post.socnetId.includes(1)) {
+						if (
+							!postStore.updatePost &&
+							dateStore.currentDate === 0 &&
+							postStore.checkSocNetTg(response.data.post.socnetId)
+						) {
 							await axios({
 								method: 'post',
 								url: 'http://localhost:5000/api/telegram/publish',
@@ -131,7 +137,11 @@ function PostModal({ type, title }: PostProps) {
 									console.log(error.response.data.message);
 								});
 						}
-						if (!postStore.updatePost && response.data.post.socnetId.includes(1)) {
+						if (
+							!postStore.updatePost &&
+							dateStore.currentDate === 0 &&
+							postStore.checkSocNetVk(response.data.post.socnetId)
+						) {
 							await axios({
 								method: 'post',
 								url: 'http://localhost:5000/api/vk/post',
@@ -144,7 +154,7 @@ function PostModal({ type, title }: PostProps) {
 								.catch(error => {
 									console.log(error.response.data.message);
 								});
-						}console.log(response.data);
+						}
 					})
 					.catch(error => {
 						console.log(error.response.data.message);
@@ -364,7 +374,17 @@ function PostModal({ type, title }: PostProps) {
 								);
 							})
 						)}
-						<div className={styles.plus}></div>
+						{postStore.socArray.length > 0 && (
+							<>
+								<div
+									onClick={() => modalStore.changeModalSoc()}
+									className={styles.plus}
+								></div>
+								<TgModal />
+								<VkModal />
+								<SocModal />
+							</>
+						)}
 					</div>
 					<div className={styles.post}>
 						<textarea

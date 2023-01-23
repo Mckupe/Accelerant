@@ -1,16 +1,13 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { tokenStore } from '../../stores/tokenStore';
-import { projectStore } from '../../stores/projectStore';
 import { observer } from 'mobx-react-lite';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
-import Header from '../../components/header/header';
+import Header from '../../components/headers/header/header';
 import Adder from '../../components/adder/adder';
 import PatternModal from '../../components/modal/pattern-modal/pattern-modal';
 import { modalStore } from '../../stores/modalStore';
-import { oneProjectStore } from '../../stores/oneProjectStore';
-import patternModal from '../../components/modal/pattern-modal/pattern-modal';
 import { patternStore } from '../../stores/patternStore';
 import Pattern from '../../components/pattern/pattern';
 

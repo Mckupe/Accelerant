@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import { dayStore } from '../../stores/daysStore';
-import Filter from '../filter/filter';
+import { dayStore } from '../../../stores/daysStore';
+import Filter from '../../filter/filter';
 import styles from './header.module.scss';
 
 type HeaderProps = {
@@ -26,8 +26,8 @@ const months = [
 
 const Header = ({ text, type }: HeaderProps) => {
 	return (
-		<div className={styles.container}>
-			<div style={{display: 'flex'}}>
+		<header className={styles.container}>
+			<div style={{ display: 'flex' }}>
 				<div className={styles.text}>{text}</div>
 				{type === 'post' ? (
 					<div className={styles.date}>
@@ -53,8 +53,12 @@ const Header = ({ text, type }: HeaderProps) => {
 					<></>
 				)}
 			</div>
-			{type === 'project' ? <></> : <Filter />}
-		</div>
+			{type === 'post' || type === 'draft' || type === 'talk' ? (
+				<Filter />
+			) : (
+				<></>
+			)}
+		</header>
 	);
 };
 

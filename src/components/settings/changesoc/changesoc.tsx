@@ -7,6 +7,7 @@ import { modalStore } from '../../../stores/modalStore';
 import TgModal from '../../modal/post-modal/tg-modal/tg-modal';
 import VkModal from '../../modal/post-modal/vk-modal/vk-modal';
 import axios from 'axios';
+import { observer } from 'mobx-react-lite';
 
 const Сhangesoc = () => {
     const [valid, setValid] = useState(true);
@@ -82,19 +83,9 @@ const Сhangesoc = () => {
                         : <button onClick={() => modalStore.changeModalTg()} className={styles.button}>Подключить</button>
                     }
                 </div>
-                <div className={styles.logoandtext__block}>
-                    <span className={styles.insta}></span>
-                    <div className={styles.menu_text}>Инстаграмм</div>
-                    {socetArray.includes("instagramm") ?
-                        <>
-                            <button onClick={addSoc} className={styles.button}>Удалить</button>
-                        </>
-                        : <button onClick={addSoc} className={styles.button}>Подключить</button>
-                    }
-                </div>
             </div>
         </div>
     )
 }
 
-export default Сhangesoc;
+export default observer(Сhangesoc);

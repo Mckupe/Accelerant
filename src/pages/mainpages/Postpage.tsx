@@ -4,7 +4,7 @@ import { tokenStore } from '../../stores/tokenStore';
 import { observer } from 'mobx-react-lite';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
-import Header from '../../components/header/header';
+import Header from '../../components/headers/header/header';
 import PostModal from '../../components/modal/post-modal/post-modal';
 import { modalStore } from '../../stores/modalStore';
 import { postStore } from '../../stores/postStore';
@@ -29,6 +29,7 @@ function Postpage() {
 				params: { projectid: oneProjectStore.activeProject.id },
 			})
 				.then(response => {
+					console.log(response.data)
 					postStore.addSocArray(response.data.socs);
 				})
 				.catch(error => {
@@ -121,7 +122,7 @@ function Postpage() {
 						{/* <Adder text={'Новый пост'} type='post' /> */}
 						<PostModal title={'Новый пост'} type={'post'} />
 						<TalkModal />
-						<PreviewModal/>
+						<PreviewModal />
 						<div className={styles.main__days}>
 							{getDaysInMonth(
 								dayStore.dateForPosts.month,

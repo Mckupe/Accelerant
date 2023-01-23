@@ -122,6 +122,26 @@ class postDataStore {
 				: -1;
 		});
 	}
+
+	checkSocNetTg(activeSocNet: number[]) {
+		let res = false;
+		activeSocNet.forEach(socNet => {
+			this.socArray.forEach(soc => {
+				if (soc.id === socNet && soc.socnet === 'telega') res = true;
+			});
+		});
+		return res;
+	}
+
+	checkSocNetVk(activeSocNet: number[]) {
+		let res = false;
+		activeSocNet.forEach(socNet => {
+			this.socArray.forEach(soc => {
+				if (soc.id === socNet && soc.socnet === 'vk') res = true;
+			});
+		});
+		return res;
+	}
 }
 
 export const postStore = new postDataStore();
