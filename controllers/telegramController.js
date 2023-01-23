@@ -95,28 +95,32 @@ class planController {
 	}
 
 	async publishNow(req, res) {
-		const { postid } = req.body;
-		const post = await Post.findOne({ where: { id: postid } });
-		post.socnetId.map(async socnetid => {
-			const socnet = await SocNet.findOne({ where: { id: socnetid } });
-			if (socnet.socnet === 'telega') {
-				const bot = new Telegraf(socnet.token);
-				const file = fs
-					.readFileSync(
-						path.resolve(
-							__dirname,
-							'../static',
-							'texts',
-							`${post.text}` + '.txt'
+		try {
+			const { postid } = req.body;
+			const post = await Post.findOne({ where: { id: postid } });
+			post.socnetId.map(async socnetid => {
+				const socnet = await SocNet.findOne({ where: { id: socnetid } });
+				if (socnet.socnet === 'telega') {
+					const bot = new Telegraf(socnet.token);
+					const file = fs
+						.readFileSync(
+							path.resolve(
+								__dirname,
+								'../static',
+								'texts',
+								`${post.text}` + '.txt'
+							)
 						)
-					)
-					.toString();
-				await post.update({ published: true }, { where: { id: post.id } });
-				console.log('213123213');
-				await bot.telegram.sendMessage(socnet.link, file);
-			}
-		});
-		return res.json('Пост опубликован.');
+						.toString();
+					await post.update({ published: true }, { where: { id: post.id } });
+					console.log('213123213');
+					await bot.telegram.sendMessage(socnet.link, file);
+				}
+			});
+			return res.json('Пост опубликован.');
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
 

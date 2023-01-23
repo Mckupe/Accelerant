@@ -5,48 +5,61 @@ const path = require('path');
 
 class patternController {
 	async addPattern(req, res, next) {
-		const { userid, name, text } = req.body;
-		if (!name || !text) {
-			return next(apiError.badRequest('Отсутствует name или text!'));
+		try {
+			const { userid, name, text } = req.body;
+			if (!name || !text) {
+				return next(apiError.badRequest('Отсутствует name или text!'));
+			}
+			const user = await User.findOne({ where: { id: userid } });
+			if (!user) return next(apiError.internal('Пользователь не найден!'));
+			if (await Pattern.findOne({ where: { name: name, userId: user.id } }))
+				return next(apiError.internal('Шаблон с таким названием существует.'));
+			const namePattern = name + '_' + Date.now().toString();
+			fs.writeFileSync(
+				path.resolve(
+					__dirname,
+					'../static',
+					'patterns',
+					`${namePattern}` + '.txt'
+				),
+				text
+			);
+			const pattern = await Pattern.create({
+				text: namePattern,
+				name: name,
+				userId: userid,
+			});
+			return res.json({ pattern: pattern });
+		} catch (error) {
+			console.log(error);
 		}
-		const user = await User.findOne({ where: { id: userid } });
-		if (!user) return next(apiError.internal('Пользователь не найден!'));
-		if (await Pattern.findOne({ where: { name: name, userId: user.id } }))
-			return next(apiError.internal('Шаблон с таким названием существует.'));
-		const namePattern = name + '_' + Date.now().toString();
-		fs.writeFileSync(
-			path.resolve(
-				__dirname,
-				'../static',
-				'patterns',
-				`${namePattern}` + '.txt'
-			),
-			text
-		);
-		const pattern = await Pattern.create({
-			text: namePattern,
-			name: name,
-			userId: userid,
-		});
-		return res.json({ pattern: pattern });
 	}
 
 	async updatePattern(req, res, next) {
-		const { patternid, name, nameText, text } = req.body;
-		if (!name || !text) {
-			return next(apiError.badRequest('Отсутствует name или text!'));
+		try {
+			const { patternid, name, nameText, text } = req.body;
+			if (!name || !text) {
+				return next(apiError.badRequest('Отсутствует name или text!'));
+			}
+			fs.writeFileSync(
+				path.resolve(
+					__dirname,
+					'../static',
+					'patterns',
+					`${nameText}` + '.txt'
+				),
+				text
+			);
+			const pat = await Pattern.update(
+				{
+					name: name,
+				},
+				{ where: { id: patternid } }
+			);
+			return res.json(pat);
+		} catch (error) {
+			console.log(error);
 		}
-		fs.writeFileSync(
-			path.resolve(__dirname, '../static', 'patterns', `${nameText}` + '.txt'),
-			text
-		);
-		const pat = await Pattern.update(
-			{
-				name: name,
-			},
-			{ where: { id: patternid } }
-		);
-		return res.json(pat);
 	}
 
 	async getPatterns(req, res, next) {

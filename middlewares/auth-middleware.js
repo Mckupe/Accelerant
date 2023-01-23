@@ -19,6 +19,6 @@ module.exports = function(req, res, next) {
         req.body.username = userData.name;
         next();
     } catch (error) {
-        return error;
+        console.log(error);
     }
 }
