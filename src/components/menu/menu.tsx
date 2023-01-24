@@ -113,7 +113,19 @@ const Menu = () => {
 				</div>
 			</div>
 			<div>
-				<div className={styles.container__user}>{userStore.userdata.name}</div>
+				<div className={styles.container__user}>
+					<div className={styles.user}>
+						<div className={styles.char}>
+							{userStore.userdata.name.toUpperCase().split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')}
+						</div>
+						<span>{userStore.userdata.name}</span>
+					</div>
+					<div className={styles.payy}>
+						<div className={styles.pay}></div>
+						<span className={styles.texttopay}>Оплатить</span>
+					</div>
+					
+				</div>
 			</div>
 		</div>
 	);
