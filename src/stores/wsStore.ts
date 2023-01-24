@@ -1,8 +1,7 @@
 import { makeAutoObservable } from 'mobx';
-import { makePersistable } from 'mobx-persist-store';
 
 class wsDataStore {
-	ws: WebSocket = new WebSocket('ws://localhost:5000/');
+	ws: WebSocket = new WebSocket(`${process.env.REACT_APP_WS_URL}`);
 
 	constructor() {
 		makeAutoObservable(this);
