@@ -17,7 +17,7 @@ const Changefilters = () => {
 		postStore.activeThemeArray.map(async (theme: any, key: number) => {
 			await axios({
 				method: 'delete',
-				url: 'http://localhost:5000/api/theme/delete',
+				url: `${process.env.REACT_APP_API_URL}api/theme/delete`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,

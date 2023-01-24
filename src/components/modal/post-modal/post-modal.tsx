@@ -38,7 +38,7 @@ function PostModal({ type, title }: PostProps) {
 		await axios({
 			method: 'delete',
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
-			url: 'http://localhost:5000/api/img/delete',
+			url: `${process.env.REACT_APP_API_URL}api/img/delete`,
 			data: { imgs: imgsStore.activeImgs },
 		})
 			.then(response => {
@@ -105,7 +105,7 @@ function PostModal({ type, title }: PostProps) {
 					: (data = { ...data, talk: false, plan: true });
 				await axios({
 					method: `${postStore.updatePost ? 'put' : 'post'}`,
-					url: `http://localhost:5000/api/post/${
+					url: `${process.env.REACT_APP_API_URL}api/post/${
 						postStore.updatePost ? 'update' : 'add'
 					}`,
 					headers: { Authorization: 'Bearer ' + tokenStore.token },
@@ -126,7 +126,7 @@ function PostModal({ type, title }: PostProps) {
 						) {
 							await axios({
 								method: 'post',
-								url: 'http://localhost:5000/api/telegram/publish',
+								url: `${process.env.REACT_APP_API_URL}api/telegram/publish`,
 								headers: { Authorization: 'Bearer ' + tokenStore.token },
 								data: { postid: response.data.post.id },
 							})
@@ -144,7 +144,7 @@ function PostModal({ type, title }: PostProps) {
 						) {
 							await axios({
 								method: 'post',
-								url: 'http://localhost:5000/api/vk/post',
+								url: `${process.env.REACT_APP_API_URL}api/vk/post`,
 								headers: { Authorization: 'Bearer ' + tokenStore.token },
 								data: { postid: response.data.post.id },
 							})
@@ -183,7 +183,7 @@ function PostModal({ type, title }: PostProps) {
 		};
 		await axios({
 			method: `${postStore.updatePost ? 'put' : 'post'}`,
-			url: `http://localhost:5000/api/post/${
+			url: `${process.env.REACT_APP_API_URL}api/post/${
 				postStore.updatePost ? 'update' : 'add'
 			}`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
@@ -204,7 +204,7 @@ function PostModal({ type, title }: PostProps) {
 	async function onClickDelete() {
 		await axios({
 			method: `delete`,
-			url: `http://localhost:5000/api/post/delete`,
+			url: `${process.env.REACT_APP_API_URL}api/post/delete`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: { postid: postStore.activePostId },
 		})
@@ -238,7 +238,7 @@ function PostModal({ type, title }: PostProps) {
 			else {
 				await axios({
 					method: `put`,
-					url: `http://localhost:5000/api/post/update`,
+					url: `${process.env.REACT_APP_API_URL}api/post/update`,
 					headers: { Authorization: 'Bearer ' + tokenStore.token },
 					data: {
 						text: postStore.textPost,
@@ -290,7 +290,7 @@ function PostModal({ type, title }: PostProps) {
 		}
 		await axios({
 			method: `post`,
-			url: `http://localhost:5000/api/img/upload`,
+			url: `${process.env.REACT_APP_API_URL}api/img/upload`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: form,
 		})
@@ -419,7 +419,7 @@ function PostModal({ type, title }: PostProps) {
 									return (
 										<img
 											className={styles.preview}
-											src={`http://localhost:5000/static/imgs/${img}`}
+											src={`${process.env.REACT_APP_API_URL}static/imgs/${img}`}
 											alt=''
 											key={key}
 										/>

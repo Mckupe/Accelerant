@@ -18,7 +18,7 @@ function Draftpage() {
 		async function getPosts() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/post/getAll',
+				url: `${process.env.REACT_APP_API_URL}api/post/getAll`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				params: {
 					projectid: oneProjectStore.activeProject.id,

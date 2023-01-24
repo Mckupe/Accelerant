@@ -39,7 +39,7 @@ function TalkModal() {
 			);
 			await axios({
 				method: 'post',
-				url: 'http://localhost:5000/api/comment/add',
+				url: `${process.env.REACT_APP_API_URL}api/comment/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: { postid: postStore.activePostId, text: value },
 			})

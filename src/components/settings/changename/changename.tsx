@@ -19,10 +19,10 @@ const Changename = () => {
 			console.log(value);
 			await axios({
 				method: 'put',
-				url: 'http://localhost:5000/api/project/update',
+				url: `${process.env.REACT_APP_API_URL}api/project/update`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
-                    projectid: oneProjectStore.activeProject.id,
+					projectid: oneProjectStore.activeProject.id,
 					name: value,
 				},
 			})

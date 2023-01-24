@@ -36,7 +36,7 @@ function Post({
 		const id = e.currentTarget.dataset.id;
 		await axios({
 			method: 'get',
-			url: 'http://localhost:5000/api/post/getOne',
+			url: `${process.env.REACT_APP_API_URL}api/post/getOne`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			params: { postid: id },
 		})
@@ -56,7 +56,7 @@ function Post({
 			});
 		await axios({
 			method: 'get',
-			url: 'http://localhost:5000/api/comment/get',
+			url: `${process.env.REACT_APP_API_URL}api/comment/get`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			params: { postid: id },
 		})
@@ -120,7 +120,7 @@ function Post({
 					return (
 						<img
 							className={styles.preview}
-							src={`http://localhost:5000/static/imgs/${img}`}
+							src={`${process.env.REACT_APP_API_URL}static/imgs/${img}`}
 							alt=''
 							key={key}
 						/>

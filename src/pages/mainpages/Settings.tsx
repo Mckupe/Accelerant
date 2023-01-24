@@ -20,7 +20,7 @@ function Settingspage() {
 		async function getThemeData() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/theme/get',
+				url: `${process.env.REACT_APP_API_URL}api/theme/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				params: { projectid: oneProjectStore.activeProject.id },
 			})
@@ -38,7 +38,7 @@ function Settingspage() {
 		e.preventDefault();
 		await axios({
 			method: 'delete',
-			url: 'http://localhost:5000/api/project/delete',
+			url: `${process.env.REACT_APP_API_URL}api/project/delete`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: {
 				projectid: oneProjectStore.activeProject.id,

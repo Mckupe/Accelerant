@@ -19,7 +19,7 @@ function TgModal() {
 		} else {
 			await axios({
 				method: 'post',
-				url: 'http://localhost:5000/api/soc/add',
+				url: `${process.env.REACT_APP_API_URL}api/soc/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,

@@ -26,7 +26,7 @@ function Authpage() {
 		e.preventDefault();
 		const reEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 		const rePass = /^.{8,}$/;
-		let url = 'http://localhost:5000/api/user/register';
+		let url = `${process.env.REACT_APP_API_URL}api/user/register`;
 		if (!reEmail.test(userStore.userdata.email)) {
 			userStore.changeValidEmail(false);
 		}
@@ -44,7 +44,7 @@ function Authpage() {
 			rePass.test(userStore.userdata.password)
 		) {
 			if (panel === 'auth') {
-				url = 'http://localhost:5000/api/user/login';
+				url = `${process.env.REACT_APP_API_URL}api/user/login`;
 			}
 			userStore.changeValidEmail(true);
 			userStore.changeValidPassword(true);
@@ -64,7 +64,7 @@ function Authpage() {
 					navigate('/project');
 				})
 				.catch(error => {
-					console.log(error.response.data.message);
+					console.log(error.response);
 				});
 		}
 	}

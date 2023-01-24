@@ -19,7 +19,7 @@ function ProjectModal() {
 			console.log(value);
 			await axios({
 				method: 'post',
-				url: 'http://localhost:5000/api/project/add',
+				url: `${process.env.REACT_APP_API_URL}api/project/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					name: value,

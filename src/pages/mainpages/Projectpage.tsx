@@ -23,7 +23,7 @@ function Projectpage() {
 		async function telegram() {
 			await axios({
 				method: 'post',
-				url: 'http://localhost:5000/api/telegram/check',
+				url: `${process.env.REACT_APP_API_URL}api/telegram/check`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 			})
 				.then(response => {
@@ -40,7 +40,7 @@ function Projectpage() {
 		async function projects() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/project/get',
+				url: `${process.env.REACT_APP_API_URL}api/project/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 			})
 				.then(response => {
@@ -71,7 +71,7 @@ function Projectpage() {
 		const favorit = projectStore.favorit(e.currentTarget.dataset.id);
 		await axios({
 			method: 'put',
-			url: 'http://localhost:5000/api/project/update',
+			url: `${process.env.REACT_APP_API_URL}api/project/update`,
 			headers: { Authorization: 'Bearer ' + tokenStore.token },
 			data: {
 				projectid: e.currentTarget.dataset.id,

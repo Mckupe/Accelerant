@@ -22,12 +22,16 @@ function PatternModal() {
 			};
 			await axios({
 				method: `${modalStore.updatePattern ? 'put' : 'post'}`,
-				url: `http://localhost:5000/api/pattern/${
+				url: `${process.env.REACT_APP_API_URL}api/pattern/${
 					modalStore.updatePattern ? 'update' : 'add'
 				}`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: modalStore.updatePattern
-					? { ...data, patternid: patternStore.activePattern.id, nameText: patternStore.activePattern.nameText }
+					? {
+							...data,
+							patternid: patternStore.activePattern.id,
+							nameText: patternStore.activePattern.nameText,
+					  }
 					: data,
 			}).catch(error => {
 				return console.log(error.response.data.message);

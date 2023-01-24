@@ -23,7 +23,7 @@ function Postpage() {
 		async function getSocData() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/soc/get',
+				url: `${process.env.REACT_APP_API_URL}api/soc/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				params: { projectid: oneProjectStore.activeProject.id },
 			})
@@ -41,7 +41,7 @@ function Postpage() {
 		async function patterns() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/pattern/get',
+				url: `${process.env.REACT_APP_API_URL}/pattern/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 			})
 				.then(response => {
@@ -72,7 +72,7 @@ function Postpage() {
 		async function getThemeData() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/theme/get',
+				url: `${process.env.REACT_APP_API_URL}api/theme/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				params: { projectid: oneProjectStore.activeProject.id },
 			})
@@ -90,7 +90,7 @@ function Postpage() {
 		async function getPosts() {
 			await axios({
 				method: 'get',
-				url: 'http://localhost:5000/api/post/getAll',
+				url: `${process.env.REACT_APP_API_URL}api/post/getAll`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				params: {
 					projectid: oneProjectStore.activeProject.id,

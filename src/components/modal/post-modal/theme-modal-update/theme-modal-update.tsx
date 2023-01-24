@@ -24,7 +24,7 @@ function ThemeModal() {
 			postStore.activeThemeArray.map(async (theme: any, key: number) => {
 				await axios({
 					method: 'put',
-					url: 'http://localhost:5000/api/theme/update',
+					url: `${process.env.REACT_APP_API_URL}api/theme/update`,
 					headers: { Authorization: 'Bearer ' + tokenStore.token },
 					data: {
 						projectid: oneProjectStore.activeProject.id,

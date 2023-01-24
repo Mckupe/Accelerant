@@ -22,7 +22,7 @@ function ThemeModal() {
 		} else {
 			await axios({
 				method: 'post',
-				url: 'http://localhost:5000/api/theme/add',
+				url: `${process.env.REACT_APP_API_URL}api/theme/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,
