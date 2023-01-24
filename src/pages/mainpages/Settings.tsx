@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { tokenStore } from '../../stores/tokenStore';
-import { projectStore } from '../../stores/projectStore';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './main.module.scss';
 import Menu from '../../components/menu/menu';
 import Header from '../../components/headers/header/header';
@@ -37,7 +36,6 @@ function Settingspage() {
 
 	const sas = async function name(e: any) {
 		e.preventDefault();
-		const re = /^.{1,}$/;
 		await axios({
 			method: 'delete',
 			url: 'http://localhost:5000/api/project/delete',
@@ -54,26 +52,6 @@ function Settingspage() {
 			});
 		navigate('/project');
 	};
-
-	async function buttonClick(e: any) {
-		e.preventDefault();
-		const re = /^.{1,}$/;
-		await axios({
-			method: 'delete',
-			url: 'http://localhost:5000/api/project/delete',
-			headers: { Authorization: 'Bearer ' + tokenStore.token },
-			data: {
-				projectid: oneProjectStore.activeProject.id,
-			},
-		})
-			.then(response => {
-				return console.log(response.data);
-			})
-			.catch(error => {
-				return console.log(error.response.data.message);
-			});
-		oneProjectStore.changeActiveProject(0, '', '');
-	}
 
 	return (
 		<div className={styles.main__container}>

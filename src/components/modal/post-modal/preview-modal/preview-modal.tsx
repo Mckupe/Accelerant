@@ -1,7 +1,4 @@
-import axios from 'axios';
-import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
 import { imgsStore } from '../../../../stores/imgsStore';
 import { modalStore } from '../../../../stores/modalStore';
 import { postStore } from '../../../../stores/postStore';

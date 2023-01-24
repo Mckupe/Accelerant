@@ -12,7 +12,6 @@ import TalkModal from '../../components/modal/talk-modal/talk-modal';
 import Post from '../../components/post/post';
 import { oneProjectStore } from '../../stores/oneProjectStore';
 import dayjs from 'dayjs';
-import { dateStore } from '../../stores/dateStore';
 import { dayStore } from '../../stores/daysStore';
 import { patternStore } from '../../stores/patternStore';
 import PatternModal from '../../components/modal/pattern-modal/pattern-modal';
@@ -29,7 +28,6 @@ function Postpage() {
 				params: { projectid: oneProjectStore.activeProject.id },
 			})
 				.then(response => {
-					console.log(response.data)
 					postStore.addSocArray(response.data.socs);
 				})
 				.catch(error => {

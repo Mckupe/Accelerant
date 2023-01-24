@@ -2,14 +2,11 @@ import styles from './adderfilter.module.scss';
 import { postStore } from '../../stores/postStore';
 import ThemeModal from '../modal/post-modal/theme-modal/theme-modal';
 import { modalStore } from '../../stores/modalStore';
-import { useState } from 'react';
 
 const AdderFilter = () => {
-    const [alert, setAlert] = useState('');
 
     function changeThemeArray(e: any) {
 		postStore.addActiveTheme(Number(e.currentTarget.dataset.id));
-		setAlert('');
 	}
     
     return (

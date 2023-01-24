@@ -219,32 +219,51 @@ function PostModal({ type, title }: PostProps) {
 	}
 
 	async function onClickTalk() {
-		await axios({
-			method: `put`,
-			url: `http://localhost:5000/api/post/update`,
-			headers: { Authorization: 'Bearer ' + tokenStore.token },
-			data: {
-				text: postStore.textPost,
-				time: dateStore.dateM + dateStore.timeM,
-				img: imgsStore.activeImgs,
-				draft: false,
-				talk: true,
-				plan: false,
-				socnetid: postStore.activeSocArray,
-				themeid: postStore.activeThemeArray,
-				projectid: oneProjectStore.activeProject.id,
-				nameCreator: userStore.userdata.name,
-				postid: postStore.activePostId,
-			},
-		})
-			.then(response => {
-				console.log(response.data);
-			})
-			.catch(error => {
-				console.log(error.response.data.message);
-			});
-		resetAll();
-		modalStore.changeAddPost();
+		let time;
+		if (dateStore.currentDate === 0) time = dateStore.dateM + dateStore.timeM;
+		else {
+			time = dateStore.currentDate;
+			if (time < Date.now()) {
+				setAlert('Время публикации в прошлом.');
+				return;
+			}
+		}
+		if (postStore.activeSocArray.length === 0)
+			setAlert('Пожалуйста, выберите аккаунты для публикации.');
+		else if (postStore.activeThemeArray.length > 3)
+			setAlert('Пожалуйста, выберите не больше трех тем.');
+		else {
+			if (postStore.textPost.length === 0)
+				setAlert('Вы не можете разместить публикацию без текста.');
+			else {
+				await axios({
+					method: `put`,
+					url: `http://localhost:5000/api/post/update`,
+					headers: { Authorization: 'Bearer ' + tokenStore.token },
+					data: {
+						text: postStore.textPost,
+						time: dateStore.dateM + dateStore.timeM,
+						img: imgsStore.activeImgs,
+						draft: false,
+						talk: true,
+						plan: false,
+						socnetid: postStore.activeSocArray,
+						themeid: postStore.activeThemeArray,
+						projectid: oneProjectStore.activeProject.id,
+						nameCreator: userStore.userdata.name,
+						postid: postStore.activePostId,
+					},
+				})
+					.then(response => {
+						console.log(response.data);
+					})
+					.catch(error => {
+						console.log(error.response.data.message);
+					});
+				resetAll();
+				modalStore.changeAddPost();
+			}
+		}
 	}
 
 	function changeSocnetArray(e: any) {
@@ -557,7 +576,9 @@ function PostModal({ type, title }: PostProps) {
 												? 'Утвердить'
 												: type === 'talk'
 												? 'На утверждение'
-												: 'Запланировать'}
+												: type === 'draft'
+												? 'В черновики'
+												: 'Опубликовать'}
 										</button>
 									</>
 								) : (
@@ -593,6 +614,8 @@ function PostModal({ type, title }: PostProps) {
 												? 'Утвердить'
 												: type === 'talk'
 												? 'На утверждение'
+												: type === 'draft'
+												? 'В черновики'
 												: 'Запланировать'}
 										</button>
 									</div>
