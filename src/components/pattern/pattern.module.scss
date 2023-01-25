@@ -22,11 +22,14 @@
 }
 
 .head__text {
-	width: 122px;
+	max-width: 152px;
 	font-weight: 700;
 	font-size: 16px;
 	line-height: 140%;
 	color: #2a2c2a;
+	overflow: hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
 }
 
 .main {

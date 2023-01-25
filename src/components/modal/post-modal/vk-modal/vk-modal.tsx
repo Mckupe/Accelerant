@@ -19,7 +19,7 @@ function VkModal() {
 		} else {
 			await axios({
 				method: 'post',
-				url: `${process.env.REACT_APP_API_URL}api/soc/add`,
+				url: `${process.env.REACT_APP_REACT_APP_API_URL}api/soc/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,
