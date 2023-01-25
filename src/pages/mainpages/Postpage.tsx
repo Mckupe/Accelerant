@@ -41,7 +41,7 @@ function Postpage() {
 		async function patterns() {
 			await axios({
 				method: 'get',
-				url: `${process.env.REACT_APP_API_URL}/pattern/get`,
+				url: `${process.env.REACT_APP_API_URL}api/pattern/get`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 			})
 				.then(response => {

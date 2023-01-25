@@ -19,7 +19,7 @@ function VkModal() {
 		} else {
 			await axios({
 				method: 'post',
-				url: `${process.env.API_URL}api/soc/add`,
+				url: `${process.env.REACT_APP_API_URL}api/soc/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,
@@ -35,7 +35,7 @@ function VkModal() {
 					console.log(error.response.data.message);
 				});
 			modalStore.changeAddTg();
-			modalStore.changeModalTg();
+			modalStore.changeModalVk();
 			setValueLink('');
 			setValueToken('');
 			setValid(true);

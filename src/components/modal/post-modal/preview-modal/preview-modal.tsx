@@ -6,7 +6,6 @@ import { previewStore } from '../../../../stores/previewStore';
 import styles from './preview-modal.module.scss';
 
 function PreviewModal() {
-
 	if (!modalStore.modalPreview) return null;
 
 	return (
@@ -45,7 +44,7 @@ function PreviewModal() {
 							<div className={styles.head__post}>
 								<div style={{ display: 'flex', alignItems: '' }}>
 									<div className={styles.avatar}></div>
-									<span className={styles.name}>Сергей Жданов</span>
+									<span className={styles.name}>Ваше Имя</span>
 								</div>
 								<svg
 									width='20'

@@ -17,6 +17,24 @@ function Settingspage() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		async function getSocData() {
+			await axios({
+				method: 'get',
+				url: `${process.env.REACT_APP_API_URL}api/soc/get`,
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+				params: { projectid: oneProjectStore.activeProject.id },
+			})
+				.then(response => {
+					postStore.addSocArray(response.data.socs);
+				})
+				.catch(error => {
+					console.log(error.response.data.message);
+				});
+		}
+		getSocData();
+	}, [modalStore.addTg]);
+
+	useEffect(() => {
 		async function getThemeData() {
 			await axios({
 				method: 'get',
