@@ -126,6 +126,14 @@ class vkController {
 					apiError.badRequest('Отсутствует сообщение, фотография или клиент')
 				);
 			}
+	async send(req, res) {
+		try {
+			const { userid, text, img, time, client } = req.body;
+			if (!text || !img & !client) {
+				return next(
+					apiError.badRequest('Отсутствует сообщение, фотография или клиент')
+				);
+			}
 
 			//const post = await Post.create({ text: text, time: time, draft: draft, talk: talk, plan: plan, projectId: projectid });
 			// const soclist = await SocNetList.create({ postId: post.id, socnetId: socnetid });

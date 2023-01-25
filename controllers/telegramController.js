@@ -10,16 +10,18 @@ class planController {
 			try {
 				console.log('check');
 				const posts = await Post.findAll({ where: { published: false } });
+				console.log(posts);
 				posts.map(async post => {
 					if (post.plan) {
+						console.log('check2');
 						const plantime = Number(post.time) - Date.now();
 						post.socnetId.map(async socid => {
 							const socnet = await SocNet.findOne({ where: { id: socid } });
 							if (socnet.socnet === 'telega') {
 								const bot = new Telegraf(socnet.token);
+								console.log(plantime);
 								if (plantime < 100000 && plantime > 0) {
 									const img = await Img.findOne({ where: { postId: post.id } });
-									console.log(img);
 									if (!img) {
 										const file = fs
 											.readFileSync(
@@ -31,18 +33,23 @@ class planController {
 												)
 											)
 											.toString();
-										await post.update(
-											{ published: true },
-											{ where: { id: post.id } }
-										);
+										console.log('check3');
 										new schedule.scheduleJob(
 											{
 												start: new Date(Date.now() + plantime),
 												end: new Date(new Date(Date.now() + plantime + 1000)),
 												rule: '*/1 * * * * *',
 											},
-											function () {
-												bot.telegram.sendMessage(socnet.link, file);
+											async function () {
+												try {
+													bot.telegram.sendMessage(socnet.link, file);
+													await post.update(
+														{ published: true },
+														{ where: { id: post.id } }
+													);
+												} catch (error) {
+													console.log(error);
+												}
 											}
 										);
 									} else {
@@ -61,22 +68,26 @@ class planController {
 										for (let i = 0; i < imgs.length; i++) {
 											media.push({
 												type: 'photo',
-												media: `http://localhost:5000/static/imgs/${imgs[i]}`,
+												media: `${procces.env.REACT_APP_API_URL}static/imgs/${imgs[i]}`,
 											});
 										}
-										await post.update(
-											{ plan: false },
-											{ where: { id: post.id } }
-										);
 										new schedule.scheduleJob(
 											{
 												start: new Date(Date.now() + plantime),
 												end: new Date(new Date(Date.now() + plantime + 1000)),
 												rule: '*/1 * * * * *',
 											},
-											function () {
-												bot.telegram.sendMediaGroup(socnet.link, media);
-												bot.telegram.sendMessage(socnet.link, file);
+											async function () {
+												try {
+													bot.telegram.sendMediaGroup(socnet.link, media);
+													bot.telegram.sendMessage(socnet.link, file);
+													await post.update(
+														{ published: true },
+														{ where: { id: post.id } }
+													);
+												} catch (error) {
+													console.log(error);
+												}
 											}
 										);
 									}
@@ -113,8 +124,11 @@ class planController {
 						)
 						.toString();
 					await post.update({ published: true }, { where: { id: post.id } });
-					console.log('213123213');
-					await bot.telegram.sendMessage(socnet.link, file);
+					try {
+						await bot.telegram.sendMessage(socnet.link, file);
+					} catch (error) {
+						console.log(error);
+					}
 				}
 			});
 			return res.json('Пост опубликован.');

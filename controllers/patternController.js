@@ -84,7 +84,7 @@ class patternController {
 				.toString();
 			result.push({
 				id: patterns[i].id,
-				name: patterns[i].text.split('_')[0],
+				name: patterns[i].name,
 				nameText: patterns[i].text,
 				text: text,
 				userId: patterns[i].userId,
