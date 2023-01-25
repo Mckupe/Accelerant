@@ -1,4 +1,5 @@
 const { Post, Img, SocNet } = require('../models/models');
+const apiError = require('../error/apiError');
 const { VK } = require('vk-io');
 const schedule = require('node-schedule');
 const fs = require('fs');
@@ -8,57 +9,57 @@ require('dotenv').config();
 class vkController {
 	async getstat(req, res) {
 		try {
-			const { projectid } = req.body;
+			const { projectid } = req.query;
 			const posts = await Post.findAll({ where: { projectId: projectid } });
-			//const post = await Post.create({ text: text, time: time, draft: draft, talk: talk, plan: plan, projectId: projectid });
-			// const soclist = await SocNetList.create({ postId: post.id, socnetId: socnetid });
-			// const themelist = await ThemeList.create({ postId: post.id, themeId: themeid });
-			//const imgs = await Img.create({ postId: post.id, img: img });
-			//const imgs = ['https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg', '123.jpg', 'https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg']
-			const vk = new VK({ token: process.env.TOKEN });
-			const statistic = {};
-			const statictics = [];
+			const postArray = [];
+			let token = "";
 			await Promise.all(
-				posts.map(post => {
+				posts.map(async (post) => {
+					let isgood = false
+					let socToken = ""
 					post.socnetId.map(async socnetid => {
 						const socnet = await SocNet.findOne({ where: { id: socnetid } });
-						if (socnet.socnet === 'vk' && post.vkid) {
-							const vk = new VK({ token: process.env.TOKEN });
-							console.log(post.vkid);
-							statistic = await vk.api.wall.getById({
-								source: {
-									posts: post.vkid,
-									extended: 0,
-									copy_history_depth: 2,
-								},
-							});
-							statictics.push({
-								postid: post.id,
-								likes: statistic.response[0].likes.count,
-								reposts: statistic.response[0].reposts.count,
-								views: statistic.response[0].views.count,
-							});
-						}
-					});
+						socToken = socnet.token;
+						isgood = true;
+					})
+					if (post.vkid && true) {//ПО ХУЁВОМУ МАСИВ ДОСТАЁТСЯ
+						token = socToken;
+						postArray.push(post.vkid)
+						console.log(post.vkid);
+					}
 				})
 			);
-			res.json({ statictics });
+
+			const vk = new VK({token: token});//ВОТ ТУТ ТОКЕН НЕ РАБОТАЕТ
+			const statistic = await vk.api.wall.getById({
+					posts: postArray,
+					extended: 0,
+					copy_history_depth: 2
+			});
+			res.json({ statistic });
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
-	async post(req, res) {
+	async post(req, res, next) {
 		try {
 			const { postid } = req.body;
 			let imgs = await Img.findOne({ where: { postId: postid } });
 			const post = await Post.findOne({ where: { id: postid } });
-			let createdPost = {};
-			let attachment = null;
+			let postId = 0;
+			let isgood = true;
+			let data = {};
 			post.socnetId.map(async socnetid => {
 				const socnet = await SocNet.findOne({ where: { id: socnetid } });
 				if (socnet.socnet === 'vk') {
 					const vk = new VK({ token: socnet.token });
+					const statistic = await vk.api.wall.get({ owner_id: socnet.link, filter: "postponed" });
+					statistic.items.map((item) => { if (+item.date === +post.time / 1000) { isgood = false; } })
+					if (!isgood) {
+						post.destroy()
+						return next(apiError.badRequest('Пост с этим временем публикации уже существует!'))
+					}
 					const file = fs
 						.readFileSync(
 							path.resolve(
@@ -69,36 +70,49 @@ class vkController {
 							)
 						)
 						.toString();
-					// if (!file || !imgs) {
-					//     return next(apiError.badRequest("Не хватает текста или картинки"));//возможно лишняя проверка
-					// }
-					if (imgs)
-						attachment = Promise.all(
-							imgs.map(img => {
+					if (post.time > Date.now()) {
+						data = {
+							owner_id: socnet.link,
+							publish_date: post.time / 1000,
+							message: file
+						}
+						postId++;
+					}
+					else {
+						data = {
+							owner_id: socnet.link,
+							message: file, //сообщение
+						}
+					};
+					if (imgs) {
+						await Promise.all(
+							imgs.img.map((img) => {
 								return vk.upload.wallPhoto({
 									source: {
-										value: img,
+										value: `http://localhost:5000/static/imgs/${img}`,
 									},
 								});
 							})
-						);
-					createdPost = await vk.api.wall.post({
-						owner_id: socnet.link,
-						publish_date: post.time / 1000, //дату в формате unix Timestamp
-						message: file, //сообщение
-						attachment,
-					});
+						).then(async (attachment) => {
+							const createdPost = await vk.api.wall.post({ ...data, attachment });
+							postId += createdPost['post_id']
+						})
+					}
+					else {
+						const createdPost = await vk.api.wall.post(data);
+						postId += createdPost['post_id']
+					}
 					await post.update(
 						{
 							published: true,
-							vkid: socnet.link + '_' + (createdPost['post_id'] + 1),
+							vkid: socnet.link + '_' + postId,
 						},
 						{ where: { id: post.id } }
 					);
-					console.log('Пост создан: id в vk: ' + createdPost['post_id']);
+					console.log('Пост создан: id в vk: ' + postId);
+					return res.json('Пост создан: id в vk');
 				}
 			});
-			return res.json('Пост создан: id в vk: ' + createdPost['post_id']);
 		} catch (error) {
 			console.log(error);
 		}
