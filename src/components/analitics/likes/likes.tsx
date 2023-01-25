@@ -10,7 +10,11 @@ import {
 	CartesianGrid,
 	Bar,
 } from 'recharts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { tokenStore } from '../../../stores/tokenStore';
+import { oneProjectStore } from '../../../stores/oneProjectStore';
+import { modalStore } from '../../../stores/modalStore';
 
 // const UserData = [
 //     {
@@ -28,19 +32,39 @@ import { useState } from 'react';
 // ]
 
 const Changename = () => {
-	const [valid, setValid] = useState(true);
-	const [value, setValue] = useState('');
+	const [data, setData] = useState([]);
 
-	const data = [
-		{ name: '10', лайки: 20000 },
-		{ name: '11', лайки: 15000 },
-		{ name: '12', лайки: 10000 },
-		{ name: '13', лайки: 50000 },
-		{ name: '14', лайки: 20000 },
-		{ name: '15', лайки: 15000 },
-		{ name: '16', лайки: 10000 },
-		{ name: '17', лайки: 50000 },
-	];
+	// const data = [
+	// 	{ name: '10', лайки: 20000 },
+	// 	{ name: '11', лайки: 15000 },
+	// 	{ name: '12', лайки: 10000 },
+	// 	{ name: '13', лайки: 50000 },
+	// 	{ name: '14', лайки: 20000 },
+	// 	{ name: '15', лайки: 15000 },
+	// 	{ name: '16', лайки: 10000 },
+	// 	{ name: '17', лайки: 50000 },
+	// ];
+
+	useEffect(() => {
+		async function projects() {
+			await axios({
+				method: 'get',
+				url: `${process.env.REACT_APP_API_URL}api/vk/getStat`,
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+				params: {
+					projectid: oneProjectStore.activeProject.id,
+				}
+			})
+				.then(response => {
+					console.log(response)
+					setData(response.data.statistic);	
+				})
+				.catch(error => {
+					console.log(error.response.data.message);
+				});
+		}
+		projects();
+	}, [modalStore.addPost]);
 
 	// const [userData, setUserData] = useState({
 	//     labels: UserData.map((data) => data.date),
@@ -51,12 +75,6 @@ const Changename = () => {
 	//         },
 	//     ],
 	// });
-
-	async function buttonClick(e: any) {}
-
-	function changeValue(e: any) {
-		setValue(e.target.value);
-	}
 
 	return (
 		<div className={styles.container}>
@@ -73,14 +91,14 @@ const Changename = () => {
 					barSize={65}
 				>
 					<XAxis
-						dataKey='name'
+						dataKey='text'
 						scale='point'
 						padding={{ left: 30, right: 10 }}
 					/>
 					<YAxis />
 					<Tooltip />
 					<CartesianGrid strokeDasharray='3 3' />
-					<Bar dataKey='лайки' fill='#8884d8' background={{ fill: '#eee' }} />
+					<Bar dataKey='likes.count' fill='#8884d8' background={{ fill: '#eee' }} />
 				</BarChart>
 			</div>
 		</div>

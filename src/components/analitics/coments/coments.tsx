@@ -1,16 +1,20 @@
 import styles from './coments.module.scss';
 import {
-    PieChart,
-    Pie,
-    Tooltip,
-    BarChart,
-    XAxis,
-    YAxis,
-    Legend,
-    CartesianGrid,
-    Bar,
-  } from "recharts";
-import { useState } from 'react';
+	PieChart,
+	Pie,
+	Tooltip,
+	BarChart,
+	XAxis,
+	YAxis,
+	Legend,
+	CartesianGrid,
+	Bar,
+} from "recharts";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { tokenStore } from '../../../stores/tokenStore';
+import { oneProjectStore } from '../../../stores/oneProjectStore';
+import { modalStore } from '../../../stores/modalStore';
 
 // const UserData = [
 //     {
@@ -31,69 +35,83 @@ import { useState } from 'react';
 
 
 const Changename = () => {
-    const [valid, setValid] = useState(true);
-    const [value, setValue] = useState('');
+	const [data, setData] = useState([]);
 
-    const data = [
-			{ name: '10', комментарии: 200 },
-			{ name: '11', комментарии: 1500 },
-			{ name: '12', комментарии: 1000 },
-			{ name: '13', комментарии: 500 },
-			{ name: '14', комментарии: 2000 },
-			{ name: '15', комментарии: 150 },
-			{ name: '16', комментарии: 1000 },
-			{ name: '17', комментарии: 50 },
-		];
-      
-    // const [userData, setUserData] = useState({
-    //     labels: UserData.map((data) => data.date),
-    //     datasets: [
-    //         {
-    //             label: "Pops",
-    //             data: UserData.map((data) => data.value),
-    //         },
-    //     ],
-    // });
+	// const data = [
+	// 		{ name: '10', комментарии: 200 },
+	// 		{ name: '11', комментарии: 1500 },
+	// 		{ name: '12', комментарии: 1000 },
+	// 		{ name: '13', комментарии: 500 },
+	// 		{ name: '14', комментарии: 2000 },
+	// 		{ name: '15', комментарии: 150 },
+	// 		{ name: '16', комментарии: 1000 },
+	// 		{ name: '17', комментарии: 50 },
+	// 	];
 
-    async function buttonClick(e: any) {
+	useEffect(() => {
+		async function projects() {
+			await axios({
+				method: 'get',
+				url: `${process.env.REACT_APP_API_URL}api/vk/getStat`,
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+				params: {
+					projectid: oneProjectStore.activeProject.id,
+				}
+			})
+				.then(response => {
+					console.log(response)
+					setData(response.data.statistic);
+					console.log(data)
+				})
+				.catch(error => {
+					console.log(error.response.data.message);
+				});
+		}
+		projects();
+	}, [modalStore.addPost]);
 
-    }
+	// const [userData, setUserData] = useState({
+	//     labels: UserData.map((data) => data.date),
+	//     datasets: [
+	//         {
+	//             label: "Pops",
+	//             data: UserData.map((data) => data.value),
+	//         },
+	//     ],
+	// });
 
-    function changeValue(e: any) {
-        setValue(e.target.value);
-    }
 
-    return (
-			<div className={styles.container}>
-				<h1 className={styles.head}>Комментарии</h1>
-				<div className={styles.container__likes}>
-					<BarChart
-						width={1000}
-						height={300}
-						data={data}
-						margin={{
-							right: 30,
-							left: 40,
-						}}
-						barSize={65}
-					>
-						<XAxis
-							dataKey='name'
-							scale='point'
-							padding={{ left: 30, right: 10 }}
-						/>
-						<YAxis />
-						<Tooltip />
-						<CartesianGrid strokeDasharray='3 3' />
-						<Bar
-							dataKey='комментарии'
-							fill='#8884d8'
-							background={{ fill: '#eee' }}
-						/>
-					</BarChart>
-				</div>
+	return (
+		<div className={styles.container}>
+			<h1 className={styles.head}>Комментарии</h1>
+			<div className={styles.container__likes}>
+				<BarChart
+					width={1000}
+					height={300}
+					data={data}
+					margin={{
+						right: 30,
+						left: 40,
+					}}
+					barSize={65}
+				>
+					<XAxis
+						dataKey='text'
+						scale='point'
+						padding={{ left: 30, right: 10 }}
+					/>
+					<YAxis />
+					<Tooltip />
+					<CartesianGrid strokeDasharray='3 3' />
+					<Bar
+						dataKey='comments.count'
+						fill='#8884d8'
+						background={{ fill: '#eee' }}
+					/>
+				</BarChart>
 			</div>
-		);
+		</div>
+	);
 }
 
 export default Changename;

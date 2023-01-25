@@ -20,7 +20,6 @@ import Patterns from './patterns/patterns';
 import { commentStore } from '../../../stores/commentStore';
 import { previewStore } from '../../../stores/previewStore';
 import SocModal from './soc-modal/soc-modal';
-import { toJS } from 'mobx';
 
 type PostProps = {
 	type: string;
@@ -139,7 +138,6 @@ function PostModal({ type, title }: PostProps) {
 						}
 						if (
 							!postStore.updatePost &&
-							dateStore.currentDate === 0 &&
 							postStore.checkSocNetVk(response.data.post.socnetId)
 						) {
 							await axios({
@@ -153,6 +151,7 @@ function PostModal({ type, title }: PostProps) {
 								})
 								.catch(error => {
 									console.log(error.response.data.message);
+									setAlert('Уже существует пост в это время!');
 								});
 						}
 					})

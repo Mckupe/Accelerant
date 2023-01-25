@@ -19,7 +19,7 @@ function VkModal() {
 		} else {
 			await axios({
 				method: 'post',
-				url: `${process.env.API_URL}api/soc/add`,
+				url: `${process.env.REACT_APP_API_URL}api/soc/add`,
 				headers: { Authorization: 'Bearer ' + tokenStore.token },
 				data: {
 					projectid: oneProjectStore.activeProject.id,
@@ -34,8 +34,8 @@ function VkModal() {
 				.catch(error => {
 					console.log(error.response.data.message);
 				});
-			modalStore.changeAddTg();
-			modalStore.changeModalTg();
+			modalStore.changeAddVk();
+			modalStore.changeModalVk();
 			setValueLink('');
 			setValueToken('');
 			setValid(true);
@@ -62,8 +62,8 @@ function VkModal() {
 				<div className={styles.head}>Подключение канала в VK</div>
 				<div className={styles.input__container}>
 					<span className={styles.input__text}>
-						id вашего сообщества для получения токена
-						<span className={styles.pattern}>123456</span>
+						id сообщества или страницы
+						<span className={styles.pattern}>1234(-1234 для сообщества)</span>
 					</span>
 					<input
 						type='text'
@@ -72,7 +72,7 @@ function VkModal() {
 						onChange={changeValueLink}
 						className={valid ? styles.input : styles.input__invalid}
 						required
-					/><a className={styles.buttons__token} target="_blank" href={`https://oauth.vk.com/authorize?client_id=6121396&scope=134623237&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&group_ids=${valueLink}`}>
+					/><a className={styles.buttons__token} target="_blank" href={`https://oauth.vk.com/authorize?client_id=6121396&scope=501202911&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1`}>
 						Получить токен
 					</a>
 				</div>
@@ -80,7 +80,7 @@ function VkModal() {
 					<span className={styles.input__text}>
 						Токен, полученный на открытой странице
 						<span className={styles.pattern}>
-						vk1.a.l9Fa_______
+						vk1.a.l9Fa_________
 						</span>
 					</span>
 					<input

@@ -10,37 +10,50 @@ import {
 	CartesianGrid,
 	Bar,
 } from 'recharts';
-import { useState } from 'react';
-
-// const UserData = [
-//     {
-//         "date": 215,
-//         "value": 10
-//     },
-//     {
-//         "date": 235,
-//         "value": 20
-//     },
-//     {
-//         "date": 124,
-//         "value": 30
-//     }
-// ]
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { tokenStore } from '../../../stores/tokenStore';
+import { observer } from 'mobx-react-lite';
+import { oneProjectStore } from '../../../stores/oneProjectStore';
+import { modalStore } from '../../../stores/modalStore';
 
 const Changename = () => {
-	const [valid, setValid] = useState(true);
-	const [value, setValue] = useState('');
+	const [data, setData] = useState([]);
 
-	const data = [
-		{ name: '10', просмотры: 20000000 },
-		{ name: '11', просмотры: 15000000 },
-		{ name: '12', просмотры: 10000000 },
-		{ name: '13', просмотры: 5000000 },
-		{ name: '14', просмотры: 20000000 },
-		{ name: '15', просмотры: 15000000 },
-		{ name: '16', просмотры: 10000000 },
-		{ name: '17', просмотры: 5000000 },
-	];
+	// let data = [
+	// 	{ Текст: '10', Просмотры: 20000000 },
+	// 	{ Текст: '11', Просмотры: 15000000 },
+	// 	{ Текст: '12', Просмотры: 10000000 },
+	// 	{ Текст: '13', Просмотры: 5000000 },
+	// 	{ Текст: '14', Просмотры: 20000000 },
+	// 	{ Текст: '15', Просмотры: 15000000 },
+	// 	{ Текст: '16', Просмотры: 10000000 },
+	// 	{ Текст: '17', Просмотры: 5000000 },
+	// ];
+
+	useEffect(() => {
+		async function projects() {
+			await axios({
+				method: 'get',
+				url: `${process.env.REACT_APP_API_URL}api/vk/getStat`,
+				headers: { Authorization: 'Bearer ' + tokenStore.token },
+				params: {
+					projectid: oneProjectStore.activeProject.id,
+				}
+			})
+				.then(response => {
+					console.log(response)
+					setData(response.data.statistic);
+					console.log(data)	
+				})
+				.catch(error => {
+					console.log(error.response.data.message);
+				});
+		}
+		projects();
+	}, [modalStore.addPost]);
+
+
 
 	// const [userData, setUserData] = useState({
 	//     labels: UserData.map((data) => data.date),
@@ -52,11 +65,7 @@ const Changename = () => {
 	//     ],
 	// });
 
-	async function buttonClick(e: any) {}
-
-	function changeValue(e: any) {
-		setValue(e.target.value);
-	}
+	async function buttonClick(e: any) { }
 
 	return (
 		<div >
@@ -74,7 +83,7 @@ const Changename = () => {
 						barSize={65}
 					>
 						<XAxis
-							dataKey='name'
+							dataKey='text'
 							scale='point'
 							padding={{ left: 30, right: 10 }}
 						/>
@@ -82,7 +91,7 @@ const Changename = () => {
 						<Tooltip />
 						<CartesianGrid strokeDasharray='3 3' />
 						<Bar
-							dataKey='просмотры'
+							dataKey='views.count'
 							fill='#8884d8'
 							background={{ fill: '#eee' }}
 						/>
@@ -93,4 +102,4 @@ const Changename = () => {
 	);
 };
 
-export default Changename;
+export default observer(Changename);

@@ -18,6 +18,7 @@ class modalDataStore {
 	addPost = false;
 	addTheme = false;
 	addTg = false;
+	addVk = false;
 
 	updatePattern = false;
 
@@ -91,6 +92,10 @@ class modalDataStore {
 
 	changeAddTg() {
 		this.addTg = !this.addTg;
+	}
+
+	changeAddVk() {
+		this.addVk = !this.addVk;
 	}
 
 	changeUpdatePattern() {
