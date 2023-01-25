@@ -8,18 +8,14 @@ class planController {
 	checkPosts(req, res) {
 		async function plan() {
 			try {
-				console.log('check');
 				const posts = await Post.findAll({ where: { published: false } });
-				console.log(posts);
 				posts.map(async post => {
 					if (post.plan) {
-						console.log('check2');
 						const plantime = Number(post.time) - Date.now();
 						post.socnetId.map(async socid => {
 							const socnet = await SocNet.findOne({ where: { id: socid } });
 							if (socnet.socnet === 'telega') {
 								const bot = new Telegraf(socnet.token);
-								console.log(plantime);
 								if (plantime < 100000 && plantime > 0) {
 									const img = await Img.findOne({ where: { postId: post.id } });
 									if (!img) {
@@ -33,24 +29,23 @@ class planController {
 												)
 											)
 											.toString();
-										console.log('check3');
 										new schedule.scheduleJob(
 											{
 												start: new Date(Date.now() + plantime),
 												end: new Date(new Date(Date.now() + plantime + 1000)),
 												rule: '*/1 * * * * *',
 											},
-											async function () {
+											function () {
 												try {
 													bot.telegram.sendMessage(socnet.link, file);
-													await post.update(
-														{ published: true },
-														{ where: { id: post.id } }
-													);
 												} catch (error) {
 													console.log(error);
 												}
 											}
+										);
+										await post.update(
+											{ published: true },
+											{ where: { id: post.id } }
 										);
 									} else {
 										const file = fs
@@ -81,14 +76,14 @@ class planController {
 												try {
 													bot.telegram.sendMediaGroup(socnet.link, media);
 													bot.telegram.sendMessage(socnet.link, file);
-													await post.update(
-														{ published: true },
-														{ where: { id: post.id } }
-													);
 												} catch (error) {
 													console.log(error);
 												}
 											}
+										);
+										await post.update(
+											{ published: true },
+											{ where: { id: post.id } }
 										);
 									}
 								}
