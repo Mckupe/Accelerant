@@ -11,32 +11,22 @@ class vkController {
 		try {
 			const { projectid } = req.query;
 			const posts = await Post.findAll({ where: { projectId: projectid } });
-			const postArray = [];
-			let token = "";
-			await Promise.all(
-				posts.map(async (post) => {
-					let isgood = false
-					let socToken = ""
-					post.socnetId.map(async socnetid => {
-						const socnet = await SocNet.findOne({ where: { id: socnetid } });
-						socToken = socnet.token;
-						isgood = true;
-					})
-					if (post.vkid && true) {//ПО ХУЁВОМУ МАСИВ ДОСТАЁТСЯ
-						token = socToken;
-						postArray.push(post.vkid)
-						console.log(post.vkid);
+			const respons = [];
+			for (let i = 0; i < posts.length; i++) {
+				for (let j = 0; j < posts[i].socnetId.length; j++) {
+					let socnet = await SocNet.findOne({ where: { id: posts[i].socnetId[j] } });
+					if (socnet.socnet === "vk") {
+						const vk = new VK({ token: socnet.token });
+						const statistic = await vk.api.wall.getById({
+							posts: posts[i].vkid,
+							extended: 0,
+							copy_history_depth: 2
+						});
+						respons.push(statistic[0]);
 					}
-				})
-			);
-
-			const vk = new VK({token: token});//ВОТ ТУТ ТОКЕН НЕ РАБОТАЕТ
-			const statistic = await vk.api.wall.getById({
-					posts: postArray,
-					extended: 0,
-					copy_history_depth: 2
-			});
-			res.json({ statistic });
+				}
+			}
+			res.json({ respons });
 		} catch (error) {
 			console.log(error);
 		}
@@ -127,11 +117,6 @@ class vkController {
 				);
 			}
 
-			//const post = await Post.create({ text: text, time: time, draft: draft, talk: talk, plan: plan, projectId: projectid });
-			// const soclist = await SocNetList.create({ postId: post.id, socnetId: socnetid });
-			// const themelist = await ThemeList.create({ postId: post.id, themeId: themeid });
-			//const imgs = await Img.create({ postId: post.id, img: img });
-			//const imgs = ['https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg', '123.jpg', 'https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg']
 			const vk = new VK({ token: process.env.TOKEN });
 
 			await Promise.all(
@@ -150,7 +135,7 @@ class vkController {
 					random_id: Math.random(), // id беседы
 				})
 			);
-			//res.json({ post: post });
+			res.json({ post: post });
 		} catch (error) {
 			console.log(error);
 		}
