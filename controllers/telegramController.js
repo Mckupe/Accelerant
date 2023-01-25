@@ -63,7 +63,7 @@ class planController {
 										for (let i = 0; i < imgs.length; i++) {
 											media.push({
 												type: 'photo',
-												media: `${procces.env.REACT_APP_API_URL}static/imgs/${imgs[i]}`,
+												media: `${process.env.REACT_APP_API_URL}static/imgs/${imgs[i]}`,
 											});
 										}
 										new schedule.scheduleJob(
@@ -108,21 +108,52 @@ class planController {
 				const socnet = await SocNet.findOne({ where: { id: socnetid } });
 				if (socnet.socnet === 'telega') {
 					const bot = new Telegraf(socnet.token);
-					const file = fs
-						.readFileSync(
-							path.resolve(
-								__dirname,
-								'../static',
-								'texts',
-								`${post.text}` + '.txt'
+					const img = await Img.findOne({ where: { postId: post.id } });
+					if (!img) {
+						const file = fs
+							.readFileSync(
+								path.resolve(
+									__dirname,
+									'../static',
+									'texts',
+									`${post.text}` + '.txt'
+								)
 							)
-						)
-						.toString();
-					await post.update({ published: true }, { where: { id: post.id } });
-					try {
-						await bot.telegram.sendMessage(socnet.link, file);
-					} catch (error) {
-						console.log(error);
+							.toString();
+						try {
+							bot.telegram.sendMessage(socnet.link, file);
+						} catch (error) {
+							console.log(error);
+						}
+
+						await post.update({ published: true }, { where: { id: post.id } });
+					} else {
+						const file = fs
+							.readFileSync(
+								path.resolve(
+									__dirname,
+									'../static',
+									'texts',
+									`${post.text}` + '.txt'
+								)
+							)
+							.toString();
+						const imgs = img.img;
+						const media = [];
+						for (let i = 0; i < imgs.length; i++) {
+							media.push({
+								type: 'photo',
+								media: `${process.env.REACT_APP_API_URL}static/imgs/${imgs[i]}`,
+							});
+						}
+						try {
+							bot.telegram.sendMediaGroup(socnet.link, media);
+							bot.telegram.sendMessage(socnet.link, file);
+						} catch (error) {
+							console.log(error);
+						}
+
+						await post.update({ published: true }, { where: { id: post.id } });
 					}
 				}
 			});
