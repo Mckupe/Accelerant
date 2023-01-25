@@ -12,7 +12,7 @@ const { v4 } = require('uuid');
 const clients = {};
 const messages = [];
 const http = require('http');
-const fileupload = require("express-fileupload");
+const fileupload = require('express-fileupload');
 
 const PORT = process.env.PORT || 5000;
 app.use(fileupload({}));
@@ -43,23 +43,27 @@ const start = async () => {
 
 const wss = new ws.Server({ server });
 wss.on('connection', ws => {
-	const id = v4();
-	clients[id] = ws;
-	console.log(`Client ${id} has been connected!`);
+	try {
+		const id = v4();
+		clients[id] = ws;
+		console.log(`Client ${id} has been connected!`);
 
-	ws.on('message', message => {
-		console.log('message')
-		const mess = JSON.parse(message);
-		messages.push(mess);
-		for (const id in clients) {
-			clients[id].send(JSON.stringify(mess));
-		}
-	});
+		ws.on('message', message => {
+			console.log('message');
+			const mess = JSON.parse(message);
+			messages.push(mess);
+			for (const id in clients) {
+				clients[id].send(JSON.stringify(mess));
+			}
+		});
 
-	ws.on('close', () => {
-		delete clients[id];
-		console.log(`Client ${id} has been disconected!`);
-	});
+		ws.on('close', () => {
+			delete clients[id];
+			console.log(`Client ${id} has been disconected!`);
+		});
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 app.use(errorMiddleware);
