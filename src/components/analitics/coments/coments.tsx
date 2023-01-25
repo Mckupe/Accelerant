@@ -60,7 +60,7 @@ const Changename = () => {
 			})
 				.then(response => {
 					console.log(response)
-					setData(response.data.statistic);
+					setData(response.data.respons);
 					console.log(data)
 				})
 				.catch(error => {

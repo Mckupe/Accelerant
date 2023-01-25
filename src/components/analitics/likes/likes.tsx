@@ -57,7 +57,7 @@ const Changename = () => {
 			})
 				.then(response => {
 					console.log(response)
-					setData(response.data.statistic);	
+					setData(response.data.respons);	
 				})
 				.catch(error => {
 					console.log(error.response.data.message);
